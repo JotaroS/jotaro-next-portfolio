@@ -3,35 +3,35 @@
         "title": "The Art of War",
         "authors": ["Sun Tzu", "Sunzi"],
         "year": 500,
-        "publisher": "Military",
+        "conference": "Military",
         "type": "proceedings"
     },
     {
         "title": "The Prince",
         "authors": ["Niccolò Machiavelli"],
         "year": 1532,
-        "publisher": "Political",
+        "conference": "Political",
         "type": "proceedings"
     },
     {
         "title": "The Wealth of Nations",
         "authors": ["Adam Smith"],
         "year": 1776,
-        "publisher": "Economic",
+        "conference": "Economic",
         "type": "proceedings"
     },
     {
         "title": "Crime and punishment",
         "authors": ["Fyodor Dostoevsky"],
         "year": 1866,
-        "publisher": "Philosophical",
+        "conference": "Philosophical",
         "type": "journal"
     },
     {
         "title": "Don Quixote",
         "authors": ["Miguel de Cervantes"],
         "year": 1605,
-        "publisher": "Fiction",
+        "conference": "Fiction",
         "type": "journal"
     }
 

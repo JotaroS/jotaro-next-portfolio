@@ -2,22 +2,34 @@ import Image from "next/image"
 import Link from "next/link"
 import PublicationSection from "@/app/components/publication_item"
 import TeachingSection from "@/app/components/lectures"
-// font
-
-
-// import { Button } from "@/components/ui/button"
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-// import { Github, Twitter } from 'lucide-react'
+import { LectureItemProps } from "@/app/components/lectures"
+import { PublicationItemList } from "@/app/components/publication_item"
+import {promises as fs} from 'fs'
 
 export default async function Portfolio() {
 
-  let res = await fetch('http://localhost:3000/lectures.json'); // `force-cache` ensures static fetching
-  const lectureItems = await res.json();
+  let lectureItems: LectureItemProps = { lectures: [] };
+  let publications: PublicationItemList = {publications: []};
 
-  res = await fetch('http://localhost:3000/publications.json'); // `force-cache` ensures static fetching
-  const publications = await res.json();
+  try {
+    // const res = await fetch('http://localhost:3000/lectures.json');
+    const res = await fs.readFile('public/lectures.json', 'utf-8');
+    const data = JSON.parse(res);
+    // if (!res.ok) throw new Error('Failed to fetch lectures');
+    lectureItems = { lectures: await data };
+  } catch (error) {
+    console.error('Error fetching lectures:', error);
+  }
 
-  
+  try {
+    // const res = await fetch('http://localhost:3000/lectures.json');
+    const res = await fs.readFile('public/publications_dev.json', 'utf-8');
+    const data = JSON.parse(res);
+    publications = { publications: await data };
+  } catch (error) {
+    console.error('Error fetching lectures:', error);
+  }
+
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -44,7 +56,7 @@ export default async function Portfolio() {
         {/* Left Sidebar */}
         <aside className="lg:w-1/3 lg:pr-8 mb-8 lg:mb-0">
           <div className="sticky top-20 mt-20">
-            <Image
+            <img
               src={"/jotaro.JPG"}
               alt="Photography credit goes to Shinsuke Yasui, a professional photographer, taken in BRLO at Gleisdreieck, Berlin."
               width={300}
@@ -128,7 +140,8 @@ export default async function Portfolio() {
 
           </section>
 
-          <PublicationSection props={publications}/>
+          {/* pass publications */}
+          <PublicationSection {...publications}/>
 
           <section className="mb-10">
             <h2 className="text-lg font-bold mb-3">Awards / Honors</h2>
@@ -158,7 +171,7 @@ export default async function Portfolio() {
 
             <h3 className="text-md mb-2">Reviewer</h3>
             <ul className="text-sm list-disc ml-5 mb-6">
-              <li>CHI 2025, <b>Special Recognition for Outstanding Review</b></li>
+              <li>CHI 2025, <b className='award'>Special Recognition for Outstanding Review</b></li>
               <li>IEEE VR 2023</li>
               <li>UIST 2023</li>
               <li>CHI 2022</li>
@@ -177,7 +190,7 @@ export default async function Portfolio() {
 
           </section>
 
-          <TeachingSection lectureItems={lectureItems} />
+          <TeachingSection {...lectureItems}/>
 
           <section className="mb-10">
             <h2 className="text-lg font-bold mb-3">Exibitions / Invited Exhibitions</h2>
