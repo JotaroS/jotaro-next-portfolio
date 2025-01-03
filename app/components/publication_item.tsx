@@ -9,6 +9,7 @@ export type PublicationItemProps = {
     authors: string[]
     conference: string
     type: string
+    award: string
     
 }
 
@@ -17,6 +18,13 @@ export function PublicationItem(props: PublicationItemProps) {
         <div>
             <div className="border-b pb-4 border-gray-600">
                 <h3 className="font-semibold mb-1">{props.title}</h3>
+                {props.award && (
+                    <><div className='my-1'>
+                        <b className='award'>
+                            {props.award}
+                        </b></div>
+                    </>
+                )}
                 <p className="text-muted-foreground text-dimmed-light dark:text-dimmed-dark">
                     {props.authors.map((author: string, index: number) => (
                         <span key={index}>{author}{index === props.authors.length - 1 ? "" : ", "}</span>
@@ -25,7 +33,6 @@ export function PublicationItem(props: PublicationItemProps) {
                 <p className="text-muted-foreground text-dimmed-light dark:text-dimmed-dark">
                     {props.conference}
                 </p>
-
                 <Link href="#" className="text-primary hover:underline">
                     Read More
                 </Link>

@@ -22,5 +22,5 @@ body {
 
 /* award tag is bold, underlined pink-500 underline*/
 .award{
-  @apply bg-gradient-to-r from-pink-500/50 to-blue-500/50;
+  @apply bg-gradient-to-r from-pink-500/70 to-blue-500/70 p-0.5;
 }

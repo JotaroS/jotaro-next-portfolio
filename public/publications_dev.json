@@ -14,7 +14,8 @@
         "year": 2021,
         "conference": "In Proceedings of UIST\u201921",
         "idx": null,
-        "type": "proceedings"
+        "type": "proceedings",
+        "award": "Best Demo Honorable Mention"
     },
     {
         "title": "Fastforce: Real-Time Reinforcement of Laser-Cut Structures",
@@ -31,7 +32,8 @@
         "year": 2021,
         "conference": "In Proceedings of CHI2021",
         "idx": null,
-        "type": "proceedings"
+        "type": "proceedings",
+        "award": null
     },
     {
         "title": "Kerf-Canceling Mechanisms: Making Laser-Cut Mechanisms Operate Across Different Laser Cutters",
@@ -45,7 +47,8 @@
         "year": 2020,
         "conference": "UIST 2020",
         "idx": null,
-        "type": "proceedings"
+        "type": "proceedings",
+        "award": null
     },
     {
         "title": "SpringFit: Joints and Mounts that Fabricate on Any Laser Cutter",
@@ -59,7 +62,8 @@
         "year": 2019,
         "conference": "UIST 2019",
         "idx": null,
-        "type": "proceedings"
+        "type": "proceedings",
+        "award": null
     },
     {
         "title": "Transcalibur: A Weight Shifting Virtual Reality Controller for 2D Shape Rendering based on Computational Perception Model",
@@ -74,7 +78,8 @@
         "year": 2019,
         "conference": "CHI 2019",
         "idx": null,
-        "type": "proceedings"
+        "type": "proceedings",
+        "award": "Best Paper Honorable Mention"
     },
     {
         "title": "DualPanto: A Haptic Device that Enables Blind Users to Continuously Interact with Virtual Worlds",
@@ -92,7 +97,8 @@
         "year": 2018,
         "conference": "UIST 2018",
         "idx": null,
-        "type": "proceedings"
+        "type": "proceedings",
+        "award": null
     },
     {
         "title": "Presenting resistive force by modifying joint angles of an avatar",
@@ -106,6 +112,7 @@
         "year": 2017,
         "conference": "VRSJ Jounal Special Issue, Vol.22, No.3",
         "idx": null,
-        "type": "journal"
+        "type": "journal",
+        "award": null
     }
 ]

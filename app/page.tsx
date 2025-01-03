@@ -12,7 +12,6 @@ export default async function Portfolio() {
   let publications: PublicationItemList = {publications: []};
 
   try {
-    // const res = await fetch('http://localhost:3000/lectures.json');
     const res = await fs.readFile('public/lectures.json', 'utf-8');
     const data = JSON.parse(res);
     // if (!res.ok) throw new Error('Failed to fetch lectures');
@@ -22,7 +21,6 @@ export default async function Portfolio() {
   }
 
   try {
-    // const res = await fetch('http://localhost:3000/lectures.json');
     const res = await fs.readFile('public/publications_dev.json', 'utf-8');
     const data = JSON.parse(res);
     publications = { publications: await data };
@@ -89,7 +87,7 @@ export default async function Portfolio() {
           <section className="mb-12">
             <h3 className="text-xl font-bold mt-20 mb-4">Profile</h3>
             <p className=" text-muted-foreground text-justify">
-              <b>Jotaro Shigeyama</b> is currently Human-Computer Interaction researcher at Sony.
+              <b>Dr. Jotaro Shigeyama</b> is currently Human-Computer Interaction researcher at Sony.
               Previously, he obtained Ph.D at Hasso Plattner Institute with Prof. Patrick Baudisch.
               He earned Bachelor & Master degree in Cyber Interface Lab with Prof. Michitaka Hirose in the University of Tokyo.
               He was a scholar of Funai Fountation for Information Technology scholarship since 2019.
@@ -114,10 +112,10 @@ export default async function Portfolio() {
               {/* left 30% goes for photo, 70 goes for title and abstract of the project, bottom aligned.*/}
               <div className="grid grid-cols-3 lg:grid-cols-3 gap-4">
                 <div className="col-start-1">
-                  <Image
-                    src={"/globe.svg"}
+                  <img
+                    src={"/projects/pantograph.png"}
                     alt="Your Name"
-                    width={200}
+                    width={345}
                     height={200}
                     className="mb-4"
                   />
@@ -144,10 +142,9 @@ export default async function Portfolio() {
           <PublicationSection {...publications}/>
 
           <section className="mb-10">
-            <h2 className="text-lg font-bold mb-3">Awards / Honors</h2>
+            <h2 className="text-lg font-bold mb-3">Other Awards / Honors</h2>
             <ul className="text-sm list-disc ml-5">
-              <li>UIST2021 Best Demo Award Honorable Mention, 2021</li>
-              <li>CHI2019 Best Paper Honorable Mention, 2019</li>
+              <li><b className="award">Funai Foundation Scholarship (top oversea Ph.D students, $2500 mtl.), 2019</b></li>
               <li>SIGGRAPH Student Research Competition (SRC) Semi-Finalist for Transcalibur, 2018</li>
               <li>HackU 2015 UTxTama-art Grand Prize for Dokimakura</li>
               <li>HATAKEYAMA Award (JSME Best student award ), Mar,2014</li>
