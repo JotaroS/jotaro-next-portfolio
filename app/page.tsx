@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Link from "next/link"
 import PublicationSection from "@/app/components/publication_item"
 import TeachingSection from "@/app/components/lectures"
@@ -34,11 +33,15 @@ export default async function Portfolio() {
       <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center">
           <nav className="flex items-center space-x-4 lg:space-x-6 ml-20">
+
+            {/* bold text says Jotaro Shigeyama without link */}
+            {/* <span className="text-sm font-bold">Jotaro Shigeyama </span> */}
+
             <Link
               href="/"
-              className="text-sm font-medium transition-colors hover:text-primary"
+              className="text-sm font-bold transition-colors hover:text-primary"
             >
-              Home
+              Jotaro Shigeyama
             </Link>
             <Link
               href="/blog"
@@ -50,10 +53,10 @@ export default async function Portfolio() {
         </div>
       </header>
 
-      <div className="container mx-auto mt-8 flex flex-col lg:flex-row">
+      <div className="container mx-auto  flex flex-col lg:flex-row">
         {/* Left Sidebar */}
         <aside className="lg:w-1/3 lg:pr-8 mb-8 lg:mb-0">
-          <div className="sticky top-20 mt-20">
+          <div className="sticky top-40 mt-20">
             <img
               src={"/jotaro.JPG"}
               alt="Photography credit goes to Shinsuke Yasui, a professional photographer, taken in BRLO at Gleisdreieck, Berlin."
@@ -117,7 +120,7 @@ export default async function Portfolio() {
                     alt="Your Name"
                     width={345}
                     height={200}
-                    className="mb-4"
+                    className="mb-4 rounded-xl"
                   />
                 </div>
                 <div className="col-span-2">
