@@ -3,6 +3,7 @@ import PublicationSection from "@/app/components/publication_item"
 import TeachingSection from "@/app/components/lectures"
 import { LectureItemProps } from "@/app/components/lectures"
 import { PublicationItemList } from "@/app/components/publication_item"
+import { PastWorkItem } from "@/app/components/past_works"
 import {promises as fs} from 'fs'
 
 export default async function Portfolio() {
@@ -111,36 +112,10 @@ export default async function Portfolio() {
           <section className="mb-12">
             <h2 className="text-xl font-bold mb-12">Past Works</h2>
             {[1, 2, 3].map((i) => (
-            <div key={i} className="mb-8 border-b border-gray-600">
-              {/* left 30% goes for photo, 70 goes for title and abstract of the project, bottom aligned.*/}
-              <div className="grid grid-cols-3 lg:grid-cols-3 gap-4">
-                <div className="col-start-1">
-                  <img
-                    src={"/projects/pantograph.png"}
-                    alt="Your Name"
-                    width={345}
-                    height={200}
-                    className="mb-4 rounded-xl"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <div className="inset-x-0 bottom-0">
-                    <h3 className="text-lg font-bold mb-4">Project Title</h3>
-                    <p className="text-sm text-muted-foreground mb-4 text-justify">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget sapien ac nisl tristique
-                      fermentum. Nullam nec purus ac justo vestibulum fermentum. Nullam nec purus ac justo vestibulum
-                      fermentum.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget sapien ac nisl tristique
-                      fermentum. Nullam nec purus ac justo vestibulum fermentum. Nullam nec purus ac justo vestibulum
-                      fermentum.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <PastWorkItem key={i} />
             ))}
-
           </section>
-
+          {/* <PastWorkItem /> */}
           {/* pass publications */}
           <PublicationSection {...publications}/>
 
