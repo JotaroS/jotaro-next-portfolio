@@ -3,13 +3,14 @@ import PublicationSection from "@/app/components/publication_item"
 import TeachingSection from "@/app/components/lectures"
 import { LectureItemProps } from "@/app/components/lectures"
 import { PublicationItemList } from "@/app/components/publication_item"
-import { PastWorkItem } from "@/app/components/past_works"
+import { PastWorkItemList, PastWorkSeciton} from "@/app/components/past_works"
 import {promises as fs} from 'fs'
 
 export default async function Portfolio() {
 
   let lectureItems: LectureItemProps = { lectures: [] };
   let publications: PublicationItemList = {publications: []};
+  let past_works: PastWorkItemList = {past_works: []};
 
   try {
     const res = await fs.readFile('public/lectures.json', 'utf-8');
@@ -26,6 +27,14 @@ export default async function Portfolio() {
     publications = { publications: await data };
   } catch (error) {
     console.error('Error fetching lectures:', error);
+  }
+
+  try{
+    const res = await fs.readFile('public/past_works.json', 'utf-8');
+    const data = JSON.parse(res);
+    past_works = { past_works: await data };
+  }catch(error){
+    console.error('Error fetching past works:', error);
   }
 
 
@@ -109,12 +118,13 @@ export default async function Portfolio() {
             </p>
           </section>
 
-          <section className="mb-12">
+          <PastWorkSeciton {...past_works}/>
+          {/* <section className="mb-12">
             <h2 className="text-xl font-bold mb-12">Past Works</h2>
             {[1, 2, 3].map((i) => (
             <PastWorkItem key={i} />
             ))}
-          </section>
+          </section> */}
           {/* <PastWorkItem /> */}
           {/* pass publications */}
           <PublicationSection {...publications}/>

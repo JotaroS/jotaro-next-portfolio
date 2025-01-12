@@ -1,4 +1,17 @@
 "use client";
+
+export type PastWorkItem = {
+    title: string,
+    year: number,
+    abstract: string,
+    project_link: string,
+    image_link: string,
+}
+
+export type PastWorkItemList = {
+    past_works: PastWorkItem[]
+}
+
 export function PastWorkItem() {
     return (
         <div className="mb-8 border-b border-gray-600">
@@ -77,8 +90,18 @@ export function PastWorkItem() {
                         </button>
                     </section>
                 </div>
-
             </div>
         </div>
     )
 };
+
+export function PastWorkSeciton(props: PastWorkItemList) {
+    return(
+        <section className="mb-12">
+            <h2 className="text-xl font-bold mb-12">Past Works</h2>
+                {props.past_works.map((item: PastWorkItem, index: number) => (
+                    <PastWorkItem key={index} {...item} />
+                ))}
+        </section>
+    )
+}
