@@ -3,10 +3,11 @@
         "title": "Trusscillator: a System for Fabricating Human-Scale Human-Powered Oscillating Devices",
         "year": "2021",
         "abstract":
-        "Ad dolore occaecat fugiat ullamco qui minim excepteur adipisicing nisi Lorem deserunt cupidatat duis.",
+        "Trusscillator is an end-to-end system that allows non-engineers to create human-scale human-powered devices that perform oscillatory movements, such as playground equipment, workout devices, and interactive kinetic installations.",
         "link_project":
         "https://www.google.com",
         "link_image":
-        "/projects/pantograph.png"
+        "/projects/trusscilator.gif",
+        "link_acm": "https://dl.acm.org/doi/10.1145/3472749.3474807"
     }
 ]

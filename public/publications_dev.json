@@ -11,11 +11,15 @@
             "Ran Zhang",
             "Patrick Baudisch"
         ],
+        "abstract": "Trusscillator is an end-to-end system that allows non-engineers to create human-scale human-powered devices that perform oscillatory movements, such as playground equipment, workout devices, and interactive kinetic installations.",
         "year": 2021,
         "conference": "In Proceedings of UIST\u201921",
         "idx": null,
         "type": "proceedings",
-        "award": "Best Demo Honorable Mention"
+        "award": "Best Demo Honorable Mention",
+        "link_acm": "https://dl.acm.org/doi/10.1145/3472749.3474807",
+        "link_image": "/projects/trusscilator.gif",
+        "featured": true
     },
     {
         "title": "Fastforce: Real-Time Reinforcement of Laser-Cut Structures",
@@ -33,7 +37,11 @@
         "conference": "In Proceedings of CHI2021",
         "idx": null,
         "type": "proceedings",
-        "award": null
+        "award": null,
+        "link_acm": "https://dl.acm.org/doi/10.1145/3411764.3445466",
+        "featured": true,
+        "link_image": "/projects/fastforce.png",
+        "abstract": "We present fastForce, a software tool that detects structural flaws in laser cut 3D models and fixes them by introducing additional plates into the model, thereby making models up to 52x stronger. By focusing on a specific type of structural issue, i.e., poorly connected sub-structures in closed box structures, fastForce achieves real-time performance."
     },
     {
         "title": "Kerf-Canceling Mechanisms: Making Laser-Cut Mechanisms Operate Across Different Laser Cutters",
@@ -48,7 +56,12 @@
         "conference": "UIST 2020",
         "idx": null,
         "type": "proceedings",
-        "award": null
+        "award": null,
+        "link_acm": "https://dl.acm.org/doi/10.1145/3379337.3415895",
+        "link_youtube": "https://www.youtube.com/watch?v=t0gFmFuhs7k&feature=youtu.be",
+        "featured": true,
+        "abstract": "Getting laser-cut mechanisms, such as those in micro-scopes, robots, vehicles, etc., to work, requires all their components to be dimensioned precisely. This precision, however, tends to be lost when fabricating on a differ-ent laser cutter, as it is likely to remove more or less mate-rial (aka 'kerf'). We address this with what we call kerf-canceling mechanisms. ",
+        "link_image": "/projects/kerf-cancelling.png"
     },
     {
         "title": "SpringFit: Joints and Mounts that Fabricate on Any Laser Cutter",
@@ -63,7 +76,10 @@
         "conference": "UIST 2019",
         "idx": null,
         "type": "proceedings",
-        "award": null
+        "award": null,
+        "featured": true,
+        "abstract" : "We present a software tool called springFit that resolves this problem by replacing the problematic press fit-based mounts and joints with what we call cantileverbased mounts and joints. ",
+        "link_image": "/projects/springfit.png"
     },
     {
         "title": "Transcalibur: A Weight Shifting Virtual Reality Controller for 2D Shape Rendering based on Computational Perception Model",
@@ -79,7 +95,9 @@
         "conference": "CHI 2019",
         "idx": null,
         "type": "proceedings",
-        "award": "Best Paper Honorable Mention"
+        "award": "Best Paper Honorable Mention",
+        "link_image": "/projects/transcalibur.png",
+        "featured": true
     },
     {
         "title": "DualPanto: A Haptic Device that Enables Blind Users to Continuously Interact with Virtual Worlds",
@@ -98,7 +116,9 @@
         "conference": "UIST 2018",
         "idx": null,
         "type": "proceedings",
-        "award": null
+        "award": null,
+        "featured": true,
+        "abstract": ""
     },
     {
         "title": "Presenting resistive force by modifying joint angles of an avatar",
