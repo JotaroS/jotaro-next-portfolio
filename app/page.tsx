@@ -59,13 +59,13 @@ export default async function Portfolio() {
       <div className="container mx-auto  flex flex-col lg:flex-row">
         {/* Left Sidebar */}
         <aside className="lg:w-1/3 lg:pr-8 mb-8 lg:mb-0">
-          <div className="sticky top-40 mt-20">
+          <div className="sticky top-40 mt-20 ">
             <img
               src={"/jotaro.JPG"}
               alt="Photography credit goes to Shinsuke Yasui, a professional photographer, taken in BRLO at Gleisdreieck, Berlin."
               width={300}
               height={300}
-              className="mb-4"
+              className="mb-4 rounded-lg"
             />
 
             <h1 className="text-xl font-bold text-left mt-10 mb-5">Jotaro Shigeyama, Ph.D.</h1>

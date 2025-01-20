@@ -24,3 +24,30 @@ body {
 .award{
   @apply bg-gradient-to-r from-pink-500/70 to-blue-500/70 p-0.5;
 }
+
+.gradBorder i {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: 30px;
+  padding: 1.5px; /* the thickness of the border */
+  /* the below will do the magic */
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    /* this will cover only the content area (no padding) */
+      linear-gradient(#fff 0 0); /* this will cover all the area */
+  -webkit-mask-composite: xor; /* needed for old browsers until the below is more supported */
+  mask-composite: exclude; /* this will exclude the first layer from the second so only the padding area will be kept visible */
+}
+
+.gradBorder i::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #ffffff73 0%, #ffffff10 50%);
+  transition: transform 0.7s linear;
+}

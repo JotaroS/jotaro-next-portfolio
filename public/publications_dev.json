@@ -79,7 +79,8 @@
         "award": null,
         "featured": true,
         "abstract" : "We present a software tool called springFit that resolves this problem by replacing the problematic press fit-based mounts and joints with what we call cantileverbased mounts and joints. ",
-        "link_image": "/projects/springfit.png"
+        "link_image": "/projects/springfit.png",
+        "link_acm": "https://dl.acm.org/doi/10.1145/3332165.3347930"
     },
     {
         "title": "Transcalibur: A Weight Shifting Virtual Reality Controller for 2D Shape Rendering based on Computational Perception Model",
@@ -97,7 +98,8 @@
         "type": "proceedings",
         "award": "Best Paper Honorable Mention",
         "link_image": "/projects/transcalibur.png",
-        "featured": true
+        "featured": true,
+        "abstract": "Transcalibur is a hand-held VR controller that dynamically alters its mass properties to simulate the sensation of various 2D shapes, enhancing user immersion through a data-driven computational perception model."
     },
     {
         "title": "DualPanto: A Haptic Device that Enables Blind Users to Continuously Interact with Virtual Worlds",
@@ -118,7 +120,9 @@
         "type": "proceedings",
         "award": null,
         "featured": true,
-        "abstract": ""
+        "abstract": "DualPanto is a haptic device designed to allow blind users to continuously interact with spatial virtual environments containing moving objects, such as in sports or shooter games.",
+        "link_image": "/projects/dualpanto.png",
+        "link_acm": "https://dl.acm.org/doi/10.1145/3242587.3242604"
     },
     {
         "title": "Presenting resistive force by modifying joint angles of an avatar",

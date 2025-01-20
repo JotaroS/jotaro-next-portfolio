@@ -25,13 +25,20 @@ export function PastWorkItem(props: PublicationItemProps) {
         <div className="mb-8 border-b border-gray-600">
             <div className="grid grid-cols-3 lg:grid-cols-3 gap-4">
                 <div className="col-start-1">
-                    <img
+                    {props.link_image && <img
                         src={props.link_image}
                         alt="Your Name"
                         width={345}
                         height={200}
                         className="mb-4 rounded-xl"
-                    />
+                    />}
+                    {!props.link_image && <img
+                        src={"/placeholder.jpg"}
+                        alt="Your Name"
+                        width={345}
+                        height={200}
+                        className="mb-4 rounded-xl"
+                    />}
                 </div>
                 <div className="col-span-2">
                     <div className="inset-x-0 bottom-0">
@@ -39,18 +46,17 @@ export function PastWorkItem(props: PublicationItemProps) {
                         <div className = "text-sm inset-x-0 bottom-0 mb-1 font-bold">
                             {props.conference}
                         </div>
+                        {props.award && (
+                            <><div className = "mb">
+                                <b className='award text-xs'>
+                                    {props.award}
+                                </b></div>
+                            </>
+                            )}
                         <p className="text-sm text-muted-foreground text-justify">
                             {props.abstract}
                         </p>
                     </div>
-                    
-                    {props.award && (
-                    <><div>
-                        <b className='award text-xs'>
-                            {props.award}
-                        </b></div>
-                    </>
-                    )}
                     <section className="mb-2">
                     {props.link_acm && <button className="relative inline-flex items-center justify-center p-0.5 mt-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-sky-600 to-blue-500 group-hover:from-red-600 group-hover:to-blue-500 hover:text-white dark:text-white" onClick={() => window.open(props.link_acm)}>
                     <span className="font-bold relative px-1 py-1 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-xs">
