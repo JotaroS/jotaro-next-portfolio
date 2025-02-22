@@ -32,37 +32,14 @@ export default async function Portfolio() {
 
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center">
-          <nav className="flex items-center space-x-4 lg:space-x-6 ml-20">
-
-            {/* bold text says Jotaro Shigeyama without link */}
-            {/* <span className="text-sm font-bold">Jotaro Shigeyama </span> */}
-
-            <Link
-              href="/"
-              className="text-sm font-bold transition-colors hover:text-primary"
-            >
-              Jotaro Shigeyama
-            </Link>
-            <Link
-              href="/blog"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-            >
-              Blog
-            </Link>
-          </nav>
-        </div>
-      </header>
-
+    <div id='my-page' className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto  flex flex-col lg:flex-row">
         {/* Left Sidebar */}
         <aside className="lg:w-1/3 lg:pr-8 mb-8 lg:mb-0">
           <div className="sticky top-40 mt-20 ">
             <img
               src={"/jotaro.JPG"}
-              alt="Photography credit goes to Shinsuke Yasui, a professional photographer, taken in BRLO at Gleisdreieck, Berlin."
+              alt="Photography credit goes to Shinsuke Yasui, a professional photographer, shot in BRLO at Gleisdreieck, Berlin."
               width={300}
               height={300}
               className="mb-4 rounded-lg"
@@ -136,6 +113,7 @@ export default async function Portfolio() {
 
             <h3 className="text-md mb-2">Program Committee</h3>
             <ul className="text-sm list-disc ml-5 mb-6">
+              <li>ACM CHI2025 LBW</li>
               <li>ACM CHI2022 LBW</li>
             </ul>
 

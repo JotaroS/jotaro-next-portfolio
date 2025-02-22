@@ -16,7 +16,7 @@
         "conference": "In Proceedings of UIST\u201921",
         "idx": null,
         "type": "proceedings",
-        "award": "Best Demo Honorable Mention",
+        "award": "UIST2024 Best Demo Honorable Mention",
         "link_acm": "https://dl.acm.org/doi/10.1145/3472749.3474807",
         "link_image": "/projects/trusscilator.gif",
         "featured": true
@@ -96,7 +96,7 @@
         "conference": "CHI 2019",
         "idx": null,
         "type": "proceedings",
-        "award": "Best Paper Honorable Mention",
+        "award": "CHI2019 Best Paper Honorable Mention",
         "link_image": "/projects/transcalibur.png",
         "featured": true,
         "abstract": "Transcalibur is a hand-held VR controller that dynamically alters its mass properties to simulate the sensation of various 2D shapes, enhancing user immersion through a data-driven computational perception model."
