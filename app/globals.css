@@ -25,6 +25,18 @@ body {
   @apply bg-gradient-to-r from-pink-500/70 to-blue-500/70 p-0.5;
 }
 
+.myMarkdown{
+  @apply prose lg:prose-xl
+  dark:prose-invert
+  prose-h1:text-4xl
+  prose-h1:font-light
+  prose-h2:text-2xl
+  prose-h2:font-light
+  prose-p:text-sm
+  prose-li:text-sm
+  prose-code:text-sm;
+}
+
 .gradBorder i {
   content: '';
   position: absolute;

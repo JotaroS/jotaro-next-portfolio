@@ -1,4 +1,3 @@
-import Link from "next/link"
 import PublicationSection from "@/app/components/publication_item"
 import TeachingSection from "@/app/components/lectures"
 import { LectureItemProps } from "@/app/components/lectures"

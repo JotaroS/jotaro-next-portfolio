@@ -16,13 +16,13 @@ export default async function Post({ params }: { params: { id: string } }) {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* <div className="container mx-auto  flex flex-col lg:flex-row"> */}
-        <article className="prose lg:prose-xl dark:prose-invert">
-          <h1 className="text-3xl font-bold mb-4">{postData.title}</h1>
-          <div className="text-gray-600 mb-4">{postData.date}</div>
-          <div dangerouslySetInnerHTML={{ __html: contentHtml }} />  
+        <article className="">
+          <div className='font-serif'>Research</div>
+          <h1 className="text-4xl font-light mb-2">{postData.title}</h1>
+          <div className="text-gray-600 mb-12 text-sm">{postData.date}</div>
+          <div className="myMarkdown" dangerouslySetInnerHTML={{ __html: contentHtml }} />  
         </article>
       </div>
     // </div>
   )
 }
-
