@@ -35,7 +35,7 @@ export function getPostData(id: string) {
   return {
     id,
     content: matterResult.content,
-    ...(matterResult.data as { date: string; title: string })
+    ...(matterResult.data as { date: string; title: string; type:string})
   }
 }
 

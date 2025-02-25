@@ -25,6 +25,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
+      <head>
+      <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.css"
+      integrity="sha384-knaESGLxlQRSHWSJ+ZbTX6/L1bJZWBsBYGb2O+g64XHFuO7CbIj9Pkf1aaVXzIZJ"
+      crossOrigin="anonymous"
+    />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

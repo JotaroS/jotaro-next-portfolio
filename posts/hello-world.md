@@ -1,9 +1,17 @@
 ---
-type: 'research'
-title: 'Hello, World!'
-date: '2023-07-10'
+type: 'blog post'
+title: 'Next.jsでポートフォリオサイトをつくる'
+date: '2024-02-25'
 tags: ['research']
 ---
+
+# ポートフォリオサイトのアップデート
+
+これまで`Hugo`というツールでポートフォリオサイトを管理していたが、アプデでロクにビルドしなくなって更新できなくなったので、流行りの `Next.js`に乗り換えることにした。とはいえ、最近はReactをいじったこともないし、Typescriptなんてものも触ったことがなかった。
+
+ただ、v0.devやchatGPT、github copilotに教えてもらいながら作業することで、ほとんど勉強することなく作れてしまったのでここでとりあえず解説しておく。そういう意味ではとてもいい時代になったものだが、最近はあらゆるアプリがWebベースで作られており、画面上のパフォーマンスを重視するUI研究者としては少し複雑な気分になる・・・。
+
+
 
 # Sic errare
 
@@ -15,6 +23,11 @@ virginitate? Nec placabat quod: conponere spumis Cereri parentis.
 - Sit mater acres inrita quique verbaque potentia
 - Exhortatur veris Dryope Aiax vulnera aeque putat
 - Eumque populos
+  
+
+$$
+-\dfrac{\hslash^2}{2m} \, \dfrac{\mathrm{d}^2 \psi}{\mathrm{d} x^2}
+$$
 
 Dolor vere utque Venulus mansura consistere cycnorum quique successibus mundum
 restitit coegerat, at utque praesentia linguisque pectora. Circes Quis dumque
