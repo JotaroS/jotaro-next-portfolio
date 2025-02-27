@@ -9,11 +9,29 @@ tags: ['research']
 
 これまで`Hugo`というツールでポートフォリオサイトを管理していたが、アプデでロクにビルドしなくなって更新できなくなったので、流行りの `Next.js`に乗り換えることにした。とはいえ、最近はReactをいじったこともないし、Typescriptなんてものも触ったことがなかった。
 
-ただ、v0.devやchatGPT、github copilotに教えてもらいながら作業することで、ほとんど勉強することなく作れてしまったのでここでとりあえず解説しておく。そういう意味ではとてもいい時代になったものだが、最近はあらゆるアプリがWebベースで作られており、画面上のパフォーマンスを重視するUI研究者としては少し複雑な気分になる・・・。
+ただ、v0.devやchatGPT、github copilotに教えてもらいながら作業することで、ほとんど勉強することなく作れてしまったのでここでとりあえず記録に残しておく。そういう意味ではとてもいい時代になったものだが、最近はあらゆるアプリがWebベースで作られており、画面上のパフォーマンスを重視するUI研究者としては少し複雑な気分になる・・・。
+
+## next-appの準備
+
+単純に`create-next-app`を用いてテンプレを作成。
+Github Pagesにホスティングするため、静的ページを生成するように、`next.config.ts`を設定しておく。
+
+```ts
+import type { NextConfig } from "next";
+
+// const nextConfig: NextConfig = {
+//   /* config options here */
+//   output: "export",
+// };
+
+const nextConfig:NextConfig = {
+  output: "export",
+  // assetPrefix: "./",
+};
 
 
-
-# Sic errare
+export default nextConfig;
+```
 
 ## Unum aquam votique quae agitque
 
