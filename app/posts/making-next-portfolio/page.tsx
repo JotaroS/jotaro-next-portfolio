@@ -11,10 +11,9 @@ export async function generateStaticParams() {
 
 export default async function Post() {
   marked.use(markedKatex());
-  const postData = await getPostData('hello-world')
+  const postData = await getPostData('making-next-portfolio')
   const contentHtml = await marked(postData.content)
 
-  
   return (
     
     <div className="max-w-4xl mx-auto px-4 py-8">

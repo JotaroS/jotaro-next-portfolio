@@ -56,6 +56,7 @@ export default async function Portfolio() {
 
             <div className="space-y-2 mb-8 text-sm">
               {/* smaller text */}
+              <p className="text-dimmed-light dark:text-dimmed-dark text-muted-foreground text-sm ">2009-2014 Tokuyama College of Tech.</p>
               <p className="text-dimmed-light dark:text-dimmed-dark text-muted-foreground text-sm ">2014-2017 <b>B.Eng.</b> The University of Tokyo</p>
               <p className="text-dimmed-light dark:text-dimmed-dark text-muted-foreground text-sm ">2017-2020 <b>M.S.</b>   The University of Tokyo</p>
               <p className="text-dimmed-light dark:text-dimmed-dark text-muted-foreground text-sm ">2018-2024 <b>Dr.rer.nat.</b>   Hasso Plattner Institut, Germany</p>

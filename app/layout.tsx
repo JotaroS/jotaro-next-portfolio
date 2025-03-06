@@ -46,7 +46,7 @@ export default function RootLayout({
                 Jotaro Shigeyama
               </Link>
               <Link
-                href="/blog"
+                href="/posts"
                 className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
               >
                 Blog

@@ -3,6 +3,8 @@ type: 'blog post'
 title: 'Next.jsでポートフォリオサイトをつくる'
 date: '2024-02-25'
 tags: ['research']
+abstract: 'HugoからNext.jsへ移行し、AIツールを活用しながらポートフォリオサイトを構築した記録。'
+thumbnail: '/posts/building-blog.webp'
 ---
 
 # ポートフォリオサイトのアップデート
@@ -24,11 +26,17 @@ const nextConfig:NextConfig = {
 export default nextConfig;
 ```
 
+その後、大まかなレイアウトやデザイン、フォントやテーマ等をイメージしたうえで、v0.devやchatgptに、トップページの雛形を書かせた。
+今回はスタイルを`tailwind`に任せているため、スタイルのクラス名を覚えたり、レイアウトを整えたりするのが本来は大変なのだが、ある程度まずはAIに書いてもらったうえで、中身の数字やクラスを都度調べながら直していくことで、スピード感あるWebsite構築を目指す。
+
+
 ## 研究業績：コンポーネントのデザインとリスト化
+
+「研究業績リスト」をきちんと作る必要がある。箇条書きでもいいのだが、サムネイル、gif、各種リンクが見やすいようになっているといいだろう。
 
 コンポーネントはあらかたのデザインをv0.devやchatGPTに伺って、自分で手を加えてファインチューニングした。
 研究や業績リストを同一のコンポーネントのコピペで記述するのはあまりに面倒くさかったので、一旦`.json`ファイルに、研究のタイトル・学会名・authors・award情報を格納し、
-コンポーネント側からファイルシステムをつうじて読み込ませた。
+コンポーネント側からファイルシステム経由で読み込ませた。
 
 
 ```ts
@@ -43,7 +51,7 @@ export default nextConfig;
 ```
 
 研究業績には一般的に複数のリンクが付随する（project page, youtube, acm dl, ieee explore, arXivなど）ので、リンクが存在する場合にはバッジを追加するような記述もした。
-
+結果、更新があればjsonファイルの編集とサムネイル画像の追加だけで完結するようにした。
 
 ```ts
 {props.link_arxiv && <button className="relative inline-flex items-center justify-center p-0.5 mt-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-700 to-red-500 group-hover:from-red-600 group-hover:to-blue-500 hover:text-white dark:text-white" 
@@ -67,18 +75,20 @@ import markedKatex from 'marked-katex-extension'
 marked.use(markedkatex);
 ```
 
-
-
-## Unum aquam votique quae agitque
-
-Lorem markdownum praemia Achilli poterit; hic crinem prioribus ocior
-virginitate? Nec placabat quod: conponere spumis Cereri parentis.
-
-- Sit mater acres inrita quique verbaque potentia
-- Exhortatur veris Dryope Aiax vulnera aeque putat
-- Eumque populos
-  
-
 $$
--\dfrac{\hslash^2}{2m} \, \dfrac{\mathrm{d}^2 \psi}{\mathrm{d} x^2}
+\begin{align}
+\frac{\partial u}{\partial x} &= \frac{\partial v}{\partial y}, \\
+\frac{\partial u}{\partial y} &= -\frac{\partial v}{\partial x}.
+\end{align}
 $$
+
+
+## まとめ
+
+publishした研究というのは意外にも色んな人に見られている。
+その伝で、ポートフォリオサイトも見られることもあるので、折に触れて整えておくべきだと思う。
+学会で見知らぬ人にホームページを見たことがあるとか、Twitterフォローしているとか言われることはしばしばある。
+ついこの間もph.d時代のボスに「メールアドレスが古いままだぞ」と突っ込まれてしまった。
+
+自分の卒論がPublishされたばかりの修士の学生は、特にこういうWebsiteを持っていたほうがいい。
+このポートフォリオサイトの構築に使ったコードはGithubにアップロードする予定だ。
