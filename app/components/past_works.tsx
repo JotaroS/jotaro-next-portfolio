@@ -73,7 +73,7 @@ export function PastWorkItem(props: PublicationItemProps) {
                     </button>}
 
                     {props.link_ieee && <button className="relative inline-flex items-center justify-center p-0.5 mt-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-800 to-teal-600 group-hover:from-red-600 group-hover:to-blue-500 hover:text-white dark:text-white" 
-                    onClick={() => window.open("https://dl.acm.org/doi/10.1145/3447548.3467234")}>
+                    onClick={() => window.open(props.link_ieee)}>
                     <span className="font-bold relative px-1 py-1 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-xs">
                     IEEE
                     </span>
@@ -81,7 +81,7 @@ export function PastWorkItem(props: PublicationItemProps) {
 
                     {/* youtube */}
                     {props.link_youtube && <button className="relative inline-flex items-center justify-center p-0.5 mt-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-700 to-red-500 group-hover:from-red-600 group-hover:to-blue-500 hover:text-white dark:text-white" 
-                    onClick={() => window.open("https://dl.acm.org/doi/10.1145/3447548.3467234")}>
+                    onClick={() => window.open(props.link_youtube)}>
                     <span className="font-bold relative px-1 py-1 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-xs">
                     youtube
                     </span>
@@ -89,7 +89,7 @@ export function PastWorkItem(props: PublicationItemProps) {
 
                     {/* github */}
                     {props.link_github && <button className="relative inline-flex items-center justify-center p-0.5 mt-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-gray-700 to-gray-500 group-hover:from-red-600 group-hover:to-blue-500 hover:text-white dark:text-white" 
-                    onClick={() => window.open("https://dl.acm.org/doi/10.1145/3447548.3467234")}>
+                    onClick={() => window.open(props.link_github)}>
                     <span className="font-bold relative px-1 py-1 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-xs">
                     project
                     </span>
@@ -97,7 +97,7 @@ export function PastWorkItem(props: PublicationItemProps) {
 
                     {/* pdf */}
                     {props.link_pdf && <button className="relative inline-flex items-center justify-center p-0.5 mt-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-yellow-700 to-yellow-500 group-hover:from-red-600 group-hover:to-blue-500 hover:text-white dark:text-white" 
-                    onClick={() => window.open("https://dl.acm.org/doi/10.1145/3447548.3467234")}>
+                    onClick={() => window.open(props.link_pdf)}>
                     <span className="font-bold relative px-1 py-1 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-xs">
                     pdf
                     </span>
@@ -105,7 +105,7 @@ export function PastWorkItem(props: PublicationItemProps) {
 
                     {/* US Patent */}
                     {props.link_us_patent && <button className="relative inline-flex items-center justify-center p-0.5 mt-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-700 to-green-500 group-hover:from-red-600 group-hover:to-blue-500 hover:text-white dark:text-white"
-                    onClick={() => window.open("https://dl.acm.org/doi/10.1145/3447548.3467234")}>
+                    onClick={() => window.open(props.link_us_patent)}>
                     <span className="font-bold relative px-1 py-1 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-xs">
                     US Patent
                     </span>

@@ -141,7 +141,7 @@ export default async function Portfolio() {
           <TeachingSection {...lectureItems}/>
 
           <section className="mb-10">
-            <h2 className="text-lg font-bold mb-3">Exibitions / Invited Exhibitions</h2>
+            <h2 className="text-lg font-bold mb-3">Exibitions / Invited Exhibitions / Media coverage</h2>
             <ul className="text-sm list-disc ml-5">
               <li>Transcalibur, 東京大学バーチャルリアリティ教育研究センター設立記念式典-東京大学が挑戦するバーチャルリアリティの未来-</li>
               <li>bryophytes.io, iiiExhibition 2017, The University of Tokyo</li>

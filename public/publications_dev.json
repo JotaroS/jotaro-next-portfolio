@@ -19,7 +19,8 @@
         "award": "UIST2024 Best Demo Honorable Mention",
         "link_acm": "https://dl.acm.org/doi/10.1145/3472749.3474807",
         "link_image": "/projects/trusscilator.gif",
-        "featured": true
+        "featured": true,
+        "link_github": "https://robertkovax.com/Trusscillator-a-System-for-Fabricating-Human-Scale-Human-Powered"
     },
     {
         "title": "Fastforce: Real-Time Reinforcement of Laser-Cut Structures",
@@ -97,8 +98,11 @@
         "idx": null,
         "type": "proceedings",
         "award": "CHI2019 Best Paper Honorable Mention",
+        "link_acm": "https://dl.acm.org/doi/10.1145/3290605.3300241",
+        "link_youtube": "https://www.youtube.com/watch?v=OiSbn6D5kwA",
         "link_image": "/projects/transcalibur.png",
         "featured": true,
+        "link_github": "/project/transcalibur",
         "abstract": "Transcalibur is a hand-held VR controller that dynamically alters its mass properties to simulate the sensation of various 2D shapes, enhancing user immersion through a data-driven computational perception model."
     },
     {
@@ -122,7 +126,26 @@
         "featured": true,
         "abstract": "DualPanto is a haptic device designed to allow blind users to continuously interact with spatial virtual environments containing moving objects, such as in sports or shooter games.",
         "link_image": "/projects/dualpanto.png",
-        "link_acm": "https://dl.acm.org/doi/10.1145/3242587.3242604"
+        "link_acm": "https://dl.acm.org/doi/10.1145/3242587.3242604",
+        "link_us_patent":"https://patents.google.com/patent/US11510817B2/en",
+        "link_youtube":"https://www.youtube.com/watch?v=J09lE9Xz_Vg"
+    },
+    {
+        "title": "Presenting Morphing Shape Illusion: Enhanced Sense of Morphing Virtual Object With Weight Shifting VR Controller by Computational Perception Model",
+        "authors": [
+            "Jotaro Shigeyama",
+            "Takeru Hashimoto",
+            "Shigeo Yoshida",
+            "Takuji Narumi",
+            "Tomohiro Tanikawa",
+            "Michitaka Hirose"
+        ],
+        "year": 2022,
+        "conference": "IEEE Computer Graphics and Applications ( Volume: 43, Issue: 4, 01 July-Aug. 2023)",
+        "idx": null,
+        "type": "journal",
+        "award": null,
+        "link_ieee":"https://ieeexplore.ieee.org/document/9999325" 
     },
     {
         "title": "Presenting resistive force by modifying joint angles of an avatar",
