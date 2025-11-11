@@ -63,6 +63,14 @@ export default function RootLayout({
         </header>
         {children}
         </ThemeProvider>
+
+           {/* copyright */}
+      <footer className="mt-20 border-t border-gray-600 py-8 text-center text-sm text-muted-foreground">
+        <p>
+          &copy; 2025 Jotaro Shigeyama. All rights reserved. Webpage made by create-next-app@latest.
+        </p>
+        </footer>
+
       </body>
       
     </html>

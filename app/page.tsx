@@ -113,13 +113,17 @@ export default async function Portfolio() {
 
             <h3 className="text-md mb-2">Program Committee</h3>
             <ul className="text-sm list-disc ml-5 mb-6">
+              <li>ACM UIST2025 Poster</li>
               <li>ACM CHI2025 LBW</li>
               <li>ACM CHI2022 LBW</li>
             </ul>
 
             <h3 className="text-md mb-2">Reviewer</h3>
             <ul className="text-sm list-disc ml-5 mb-6">
+              <li>CHI 2026, <b className='award'>Special Recognition for Outstanding Review</b></li>
+              <li>UIST 2025</li>
               <li>CHI 2025, <b className='award'>Special Recognition for Outstanding Review</b></li>
+              <li>UIST 2024</li>
               <li>IEEE VR 2023</li>
               <li>UIST 2023</li>
               <li>CHI 2022</li>
@@ -152,14 +156,6 @@ export default async function Portfolio() {
           </section>
         </main>
       </div>
-
- 　      {/* copyright */}
-      <footer className="mt-20 border-t border-gray-600 py-8 text-center text-sm text-muted-foreground">
-        <p>
-          &copy; 2024 Jotaro Shigeyama. All rights reserved. Webpage made by create-next-app@latest.
-        </p>
-        </footer>
-
     </div>
   )
 }

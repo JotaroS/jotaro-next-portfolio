@@ -3,8 +3,8 @@ type: 'Research'
 title: 'Transcalibur: A Weight Shifting Virtual Reality Controller for 2D Shape Rendering based on Computational Perception Model'
 date: '2019-01-01'
 tags: ['research']
-abstract: 'HugoからNext.jsへ移行し、AIツールを活用しながらポートフォリオサイトを構築した記録。'
-thumbnail: '/posts/building-blog.webp'
+abstract: 'We propose Transcalibur, which is a hand-held VR controller that can render a 2D shape by changing its mass properties on a 2D planar area.'
+thumbnail: '/img/transcalibur-neu.jpg'
 ---
 
 
