@@ -1,7 +1,7 @@
 import PublicationSection from "@/app/components/publication_item"
 import TeachingSection from "@/app/components/lectures"
-import { LectureItemProps } from "@/app/components/lectures"
-import { PublicationItemList } from "@/app/components/publication_item"
+import type { LectureItemProps } from "@/app/components/lectures"
+import type { PublicationItemList } from "@/app/components/publication-types"
 import {PastWorkSeciton} from "@/app/components/past_works"
 import {promises as fs} from 'fs'
 

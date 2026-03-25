@@ -20,6 +20,20 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Add a new blog post
+
+Generate a new markdown file with proper frontmatter:
+
+```bash
+npm run new:post -- "My New Entry"
+```
+
+Optional flags:
+
+```bash
+npm run new:post -- "My New Entry" -- --tags "research,vr" --thumbnail /posts/my-thumb.webp --abstract "One-line summary"
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

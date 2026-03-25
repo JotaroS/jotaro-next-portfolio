@@ -4,9 +4,22 @@ import matter from 'gray-matter'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
 
+export type PostFrontmatter = {
+  date: string
+  title: string
+  type?: string
+  tags?: string[]
+  abstract?: string
+  thumbnail?: string
+}
+
+export type PostSummary = {
+  id: string
+} & PostFrontmatter
+
 export function getSortedPostsData() {
   const fileNames = fs.readdirSync(postsDirectory)
-  const allPostsData = fileNames.map((fileName) => {
+  const allPostsData: PostSummary[] = fileNames.map((fileName) => {
     const id = fileName.replace(/\.md$/, '')
     const fullPath = path.join(postsDirectory, fileName)
     const fileContents = fs.readFileSync(fullPath, 'utf8')
@@ -14,7 +27,7 @@ export function getSortedPostsData() {
 
     return {
       id,
-      ...(matterResult.data as { date: string; title: string, abstract:string, thumbnail:string})
+      ...(matterResult.data as PostFrontmatter)
     }
   })
 
@@ -27,6 +40,13 @@ export function getSortedPostsData() {
   })
 }
 
+export function getAllPostIds() {
+  return fs
+    .readdirSync(postsDirectory)
+    .filter((fileName) => fileName.endsWith('.md'))
+    .map((fileName) => fileName.replace(/\.md$/, ''))
+}
+
 export function getPostData(id: string) {
   const fullPath = path.join(postsDirectory, `${id}.md`)
   const fileContents = fs.readFileSync(fullPath, 'utf8')
@@ -35,7 +55,7 @@ export function getPostData(id: string) {
   return {
     id,
     content: matterResult.content,
-    ...(matterResult.data as { date: string; title: string; type:string, abstract:string, thumbnail:string})
+    ...(matterResult.data as PostFrontmatter)
   }
 }
 

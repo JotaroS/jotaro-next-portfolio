@@ -1,8 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card"
 
 import {getSortedPostsData } from '../../lib/posts'
-import { marked } from 'marked'
-import markedKatex from 'marked-katex-extension'
 import Link from "next/link"
 
 // import { Car } from "lucide-react"
@@ -51,15 +49,21 @@ function BlogCard({
 
 export default async function Post() {
 const allPostdata = getSortedPostsData()
-  marked.use(markedKatex());
   return (
     
     <div className="max-w-6xl mx-auto px-4 py-8">
     {/* <div className="container mx-auto  flex flex-col lg:flex-row"> */}
         <h2 className="text-4xl font-bold py-10">Blog posts</h2>
-        <div className="grid grid-cols-3 gap-6">
-            {allPostdata.map(({id, title, abstract, thumbnail}) => (
-                <BlogCard key={id} id={id} title={title} abstract={abstract} imageUrl={thumbnail} date={""}></BlogCard>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {allPostdata.map(({id, title, abstract, thumbnail, date}) => (
+                <BlogCard
+                  key={id}
+                  id={id}
+                  title={title ?? "Untitled"}
+                  abstract={abstract ?? ""}
+                  imageUrl={thumbnail}
+                  date={date ?? ""}
+                ></BlogCard>
             ))}
         </div>
     </div>

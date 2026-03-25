@@ -1,3 +1,5 @@
+@import "highlight.js/styles/github-dark.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,15 +10,79 @@
 }
 
 .myMarkdown{
-  @apply prose lg:prose-xl
+  @apply prose prose-base lg:prose-lg
   dark:prose-invert
-  prose-h1:text-4xl
-  prose-h1:font-light
+  prose-headings:font-semibold
+  prose-h1:text-3xl
   prose-h2:text-2xl
-  prose-h2:font-light
-  prose-p:text-sm
-  prose-li:text-sm
-  prose-code:text-sm;
+  prose-h3:text-xl
+  prose-p:text-base
+  prose-li:text-base
+  prose-code:text-[0.9em]
+  prose-pre:text-[0.9em]
+  prose-blockquote:not-italic;
+}
+
+.myMarkdown :where(p, li, blockquote) {
+  line-height: 1.95;
+  letter-spacing: 0.01em;
+}
+
+.myMarkdown :where(h1, h2, h3, h4) {
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+}
+
+.myMarkdown h1 {
+  margin-top: 1.8em;
+  margin-bottom: 0.65em;
+}
+
+.myMarkdown h2 {
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid hsl(var(--border) / 0.9);
+}
+
+.myMarkdown h3 {
+  margin-top: 1.35em;
+  margin-bottom: 0.5em;
+}
+
+.myMarkdown p {
+  margin-top: 0.95em;
+  margin-bottom: 0.95em;
+}
+
+.myMarkdown ul,
+.myMarkdown ol {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-left: 1.25em;
+}
+
+.myMarkdown blockquote {
+  margin-top: 1.15em;
+  margin-bottom: 1.15em;
+}
+
+.myMarkdown aside {
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
+  padding: 0.9rem 1rem;
+  border: 1px solid hsl(var(--border) / 0.9);
+  border-radius: 0.6rem;
+  background: hsl(var(--background) / 0.45);
+}
+
+.myMarkdown aside p {
+  margin: 0.35em 0;
+}
+
+.myMarkdown hr {
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 
 .gradBorder i {
