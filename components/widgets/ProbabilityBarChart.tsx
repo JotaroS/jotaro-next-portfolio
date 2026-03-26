@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { DiceFace } from "@/components/widgets/DiceFace";
@@ -35,7 +35,7 @@ export function ProbabilityBarChart({
   const expectedProbs = expected ? expected.map((v) => v / total) : null;
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
       <style>{`
         @keyframes barGrowUp {
           from { transform: scaleY(0); }
@@ -44,31 +44,48 @@ export function ProbabilityBarChart({
       `}</style>
       {/* Legend + toggle */}
       <div className="flex flex-wrap items-center gap-3 text-xs">
-        <span className="inline-flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-sm bg-sky-500" />
+        <span className="inline-flex items-center gap-1.5" style={{ color: "#5a5a7a" }}>
+          <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: 2, background: "#60b8ff" }} />
           {observedLabel}
         </span>
         {expected && (
           <label className="inline-flex cursor-pointer items-center gap-1.5">
             {/* off by default */}
-            <button 
-              type="button"              
+            <button
+              type="button"
               role="switch"
               aria-checked={showExpected}
               onClick={() => setShowExpected((v) => !v)}
-              className={`relative inline-flex h-[18px] w-8 flex-shrink-0 items-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 ${
-                showExpected
-                  ? "bg-emerald-500"
-                  : "bg-slate-300 dark:bg-slate-600"
-              }`}
+              style={{
+                position: "relative",
+                display: "inline-flex",
+                height: 18,
+                width: 32,
+                flexShrink: 0,
+                alignItems: "center",
+                borderRadius: 9999,
+                transition: "background-color 0.2s",
+                background: showExpected ? "#60b8ff" : "#1e1e30",
+                outline: "none",
+                border: "none",
+                cursor: "pointer",
+                boxShadow: showExpected ? "0 0 8px #60b8ff66" : "none",
+              }}
             >
               <span
-                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform duration-200 ${
-                  showExpected ? "translate-x-[18px]" : "translate-x-0.5"
-                }`}
+                style={{
+                  display: "inline-block",
+                  height: 14,
+                  width: 14,
+                  borderRadius: "50%",
+                  background: "white",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.4)",
+                  transition: "transform 0.2s",
+                  transform: showExpected ? "translateX(18px)" : "translateX(2px)",
+                }}
               />
             </button>
-            <span className={showExpected ? "" : "text-slate-400"}>
+            <span style={{ color: showExpected ? "#c8ff64" : "#5a5a7a" }}>
               {expectedLabel}
             </span>
           </label>
@@ -87,7 +104,15 @@ export function ProbabilityBarChart({
                 className="absolute right-1 flex items-center"
                 style={{ top: topPx, transform: "translateY(-50%)" }}
               >
-                <span className="text-[9px] leading-none tabular-nums text-slate-400">
+                <span
+                  style={{
+                    fontSize: 9,
+                    lineHeight: 1,
+                    fontVariantNumeric: "tabular-nums",
+                    color: "#4a4a6a",
+                    fontFamily: "IBM Plex Mono, monospace",
+                  }}
+                >
                   {tick === 0 ? "0" : tick.toFixed(2)}
                 </span>
               </div>
@@ -99,17 +124,24 @@ export function ProbabilityBarChart({
         <div className="flex-1 overflow-hidden">
           {/* Bar area with gridlines */}
           <div
-            className="relative border-b border-l border-slate-300 dark:border-slate-600"
-            style={{ height: CHART_HEIGHT }}
+            className="relative"
+            style={{
+              height: CHART_HEIGHT,
+              borderBottom: "1px solid #3a3a5a",
+              borderLeft: "1px solid #3a3a5a",
+            }}
           >
-            {/* Dashed gridlines (skip 0 — that's the bottom border) */}
+            {/* Solid gridlines (skip 0 — that's the bottom border) */}
             {Y_TICKS.filter((t) => t > 0).map((tick) => {
               const topPx = CHART_HEIGHT - (tick / MAX_PROB) * CHART_HEIGHT;
               return (
                 <div
                   key={tick}
-                  className="pointer-events-none absolute inset-x-0 border-t border-dashed border-slate-200 dark:border-slate-700"
-                  style={{ top: `${topPx}px` }}
+                  className="pointer-events-none absolute inset-x-0"
+                  style={{
+                    top: `${topPx}px`,
+                    borderTop: "1px solid #1e1e30",
+                  }}
                 />
               );
             })}
@@ -138,7 +170,18 @@ export function ProbabilityBarChart({
                   >
                     {/* Percentage tooltip on hover */}
                     {isHovered && (
-                      <div className="absolute bottom-full left-1/2 mb-1 -translate-x-1/2 whitespace-nowrap rounded bg-slate-800 px-1.5 py-0.5 text-[9px] tabular-nums text-white shadow dark:bg-slate-200 dark:text-slate-800">
+                      <div
+                        className="absolute bottom-full left-1/2 mb-1 -translate-x-1/2 whitespace-nowrap"
+                        style={{
+                          background: "#1e1e30",
+                          border: "1px solid #3a3a5a",
+                          color: "#e8e4d9",
+                          borderRadius: 4,
+                          padding: "2px 6px",
+                          fontSize: 9,
+                          fontVariantNumeric: "tabular-nums",
+                        }}
+                      >
                         {(obsP * 100).toFixed(1)}%
                       </div>
                     )}
@@ -147,10 +190,10 @@ export function ProbabilityBarChart({
                       className="min-w-0 flex-1 rounded-t-sm"
                       style={{
                         height: `${obsH}px`,
-                        backgroundColor: isHovered
-                          ? "rgb(2 132 199)"
-                          : "rgb(14 165 233)",
-                        transition: "background-color 0.15s",
+                        backgroundColor: isHovered ? "#3090e0" : "#60b8ff",
+                        opacity: isHovered ? 0.9 : 0.7,
+                        transition: "background-color 0.15s, opacity 0.15s",
+                        boxShadow: isHovered ? "0 0 8px #60b8ff66" : "none",
                         transformOrigin: "bottom center",
                         animation: animKey
                           ? `barGrowUp 0.5s cubic-bezier(0.34,1.2,0.64,1) ${index * 0.06}s both`
@@ -160,9 +203,11 @@ export function ProbabilityBarChart({
                     {/* Expected bar */}
                     {expected && showExpected && (
                       <div
-                        className="min-w-0 flex-1 rounded-t-sm bg-emerald-500/80"
+                        className="min-w-0 flex-1 rounded-t-sm"
                         style={{
                           height: `${expH}px`,
+                          backgroundColor: "#c8ff64",
+                          opacity: 0.6,
                           transformOrigin: "bottom center",
                           animation: animKey
                             ? `barGrowUp 0.5s cubic-bezier(0.34,1.2,0.64,1) ${index * 0.06}s both`
@@ -198,21 +243,20 @@ export function ProbabilityBarChart({
                     <DiceFace value={diceValue} size={22} highlighted={isHovered} />
                   ) : (
                     <span
-                      className={`text-xs transition-colors ${
-                        isHovered
-                          ? "text-slate-700 dark:text-slate-200"
-                          : "text-slate-500"
-                      }`}
+                      className="text-xs transition-colors"
+                      style={{ color: isHovered ? "#e8e4d9" : "#4a4a6a" }}
                     >
                       {label}
                     </span>
                   )}
                   <span
-                    className={`tabular-nums text-[10px] transition-colors ${
-                      isHovered
-                        ? "font-medium text-slate-600 dark:text-slate-300"
-                        : "text-slate-400"
-                    }`}
+                    style={{
+                      fontVariantNumeric: "tabular-nums",
+                      fontSize: 10,
+                      transition: "color 0.15s",
+                      color: isHovered ? "#e8e4d9" : "#4a4a6a",
+                      fontWeight: isHovered ? 500 : 400,
+                    }}
                   >
                     {Math.round(observed[index])}
                   </span>

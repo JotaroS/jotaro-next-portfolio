@@ -32,11 +32,11 @@ export function DiceFace({ value, size = 28, className = "", highlighted = false
         height="90"
         rx="18"
         ry="18"
-        className={`transition-colors duration-150 ${
-          highlighted
-            ? "fill-slate-800 stroke-sky-500 dark:fill-slate-900 dark:stroke-sky-400"
-            : "fill-white stroke-slate-300 dark:fill-slate-700 dark:stroke-slate-500"
-        }`}
+        style={{
+          fill: highlighted ? "#1a1a2e" : "#13131f",
+          stroke: highlighted ? "#60b8ff" : "#3a3a5a",
+          transition: "fill 0.15s, stroke 0.15s",
+        }}
         strokeWidth="5"
       />
       {dots.map(([cx, cy], i) => (
@@ -46,9 +46,10 @@ export function DiceFace({ value, size = 28, className = "", highlighted = false
           cx={cx}
           cy={cy}
           r="9"
-          className={`transition-colors duration-150 ${
-            highlighted ? "fill-sky-400" : "fill-slate-700 dark:fill-slate-200"
-          }`}
+          style={{
+            fill: highlighted ? "#60b8ff" : "#e8e4d9",
+            transition: "fill 0.15s",
+          }}
         />
       ))}
     </svg>
