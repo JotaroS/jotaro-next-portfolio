@@ -45,7 +45,7 @@ export function WidgetRenderer({ widget }: { widget: WidgetSpec }) {
   }
 
   if (widget.type === "height-fit") {
-    return <HeightDistributionWidget title={widget.props.title} />;
+    return <HeightDistributionWidget />;
   }
 
   if (widget.type === "mermaid") {

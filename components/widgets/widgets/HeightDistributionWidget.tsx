@@ -1,311 +1,889 @@
-﻿"use client";
+"use client";
 
-import { useEffect, useMemo, useState } from "react";
+import type { CSSProperties, ChangeEvent } from "react";
+import { useMemo, useState } from "react";
+import { ScoreRing } from "@/components/widgets/ScoreRing";
 
-type HeightDistributionWidgetProps = {
-  title?: string;
-};
+// ── 日本人身長データ（厚労省 国民健康・栄養調査 参考値）─────────────────────
+const DATASETS = {
+  male: {
+    label: "男性（20代）",
+    mu: 171.2,
+    sigma: 5.9,
+    color: "#60b8ff",
+    accent: "#3090e0",
+    emoji: "👨",
+  },
+  female: {
+    label: "女性（20代）",
+    mu: 158.5,
+    sigma: 5.4,
+    color: "#f0a0c0",
+    accent: "#d06090",
+    emoji: "👩",
+  },
+  mixed: {
+    label: "混合（男女）",
+    mu: 164.8,
+    sigma: 8.2,
+    color: "#c8a0f0",
+    accent: "#9060d0",
+    emoji: "👥",
+  },
+} as const;
 
-type DistributionType = "normal" | "uniform" | "lognormal";
+type DatasetKey = keyof typeof DATASETS;
 
-const X_MIN = 145;
-const X_MAX = 195;
-
-// SVG coordinate constants
-const SVG_W = 360;
-const SVG_H = 195;
-const PLOT_X0 = 10;   // left edge of chart
-const PLOT_X1 = 350;  // right edge
-const AXIS_Y = 168;   // x-axis line y
-const PLOT_TOP = 12;  // top of plot area
-
-const X_TICKS = [150, 155, 160, 165, 170, 175, 180, 185, 190] as const;
-
-function toSvgX(x: number) {
-  return ((x - X_MIN) / (X_MAX - X_MIN)) * (PLOT_X1 - PLOT_X0) + PLOT_X0;
-}
-function toSvgY(y: number, maxY: number) {
-  return AXIS_Y - (y / maxY) * (AXIS_Y - PLOT_TOP);
-}
-
-function createDataset(size: number) {
-  const data: number[] = [];
-  let seed = 1229;
-  const next = () => {
-    seed = (seed * 1664525 + 1013904223) % 4294967296;
-    return seed / 4294967296;
-  };
-
-  for (let i = 0; i < size; i += 1) {
-    const u1 = Math.max(next(), 1e-7);
-    const u2 = next();
-    const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-    data.push(170 + z * 6.8);
-  }
-
-  return data.filter((value) => value >= X_MIN && value <= X_MAX);
-}
-
-function normalPdf(x: number, mu: number, sigma: number) {
-  const safeSigma = Math.max(sigma, 0.3);
-  const z = (x - mu) / safeSigma;
-  return Math.exp(-(z * z) / 2) / (safeSigma * Math.sqrt(2 * Math.PI));
-}
-
-function uniformPdf(x: number, min: number, max: number) {
-  const safeMin = Math.min(min, max - 0.2);
-  const safeMax = Math.max(max, safeMin + 0.2);
-  if (x < safeMin || x > safeMax) {
-    return 0;
-  }
-  return 1 / (safeMax - safeMin);
-}
-
-function logNormalPdf(x: number, mu: number, sigma: number) {
-  if (x <= 0) {
-    return 0;
-  }
-  const safeSigma = Math.max(sigma, 0.05);
-  const logX = Math.log(x);
-  const z = (logX - mu) / safeSigma;
-  return Math.exp(-(z * z) / 2) / (x * safeSigma * Math.sqrt(2 * Math.PI));
-}
-
-function evaluatePdf(
-  type: DistributionType,
-  x: number,
-  params: { a: number; b: number }
-) {
-  if (type === "uniform") {
-    return uniformPdf(x, params.a, params.b);
-  }
-  if (type === "lognormal") {
-    return logNormalPdf(x, params.a, params.b);
-  }
-  return normalPdf(x, params.a, params.b);
-}
-
-function matchScore(
-  data: number[],
-  type: DistributionType,
-  params: { a: number; b: number }
-) {
-  const epsilon = 1e-10;
-  const averageLogLikelihood =
-    data.reduce(
-      (acc, value) => acc + Math.log(evaluatePdf(type, value, params) + epsilon),
-      0
-    ) / Math.max(data.length, 1);
-
-  const scaled = ((averageLogLikelihood + 8) / 5.5) * 100;
-  return Math.max(0, Math.min(100, scaled));
-}
-
-export function HeightDistributionWidget({
-  title = "連続データの分布マッチ",
-}: HeightDistributionWidgetProps) {
-  const data = useMemo(() => createDataset(180), []);
-  const [distribution, setDistribution] = useState<DistributionType>("normal");
-  const [paramA, setParamA] = useState(170);
-  const [paramB, setParamB] = useState(7);
-
-  useEffect(() => {
-    if (distribution === "normal") {
-      setParamA(170);
-      setParamB(7);
-    } else if (distribution === "uniform") {
-      setParamA(155);
-      setParamB(185);
-    } else {
-      setParamA(5.13);
-      setParamB(0.05);
-    }
-  }, [distribution]);
-
-  const params = useMemo(() => ({ a: paramA, b: paramB }), [paramA, paramB]);
-
-  const points = useMemo(() => {
-    const result: Array<{ x: number; y: number }> = [];
-    for (let x = X_MIN; x <= X_MAX; x += 0.5) {
-      result.push({ x, y: evaluatePdf(distribution, x, params) });
-    }
-    return result;
-  }, [distribution, params]);
-
-  const maxY = Math.max(...points.map((point) => point.y), 0.0001);
-  const score = useMemo(
-    () => matchScore(data, distribution, params),
-    [data, distribution, params]
+// ── ガウス分布 ─────────────────────────────────────────────────────────────────
+function gauss(x: number, mu: number, sigma: number) {
+  return (
+    (1 / (sigma * Math.sqrt(2 * Math.PI))) *
+    Math.exp(-0.5 * ((x - mu) / sigma) ** 2)
   );
-  const stroke =
-    score >= 85 ? "#10b981" : score >= 60 ? "#eab308" : "#f43f5e";
-  const fillColor =
-    score >= 85 ? "#10b98122" : score >= 60 ? "#eab30820" : "#f43f5e18";
+}
 
-  // Build curve path
-  const linePath = points
-    .map((pt, i) => {
-      const px = toSvgX(pt.x);
-      const py = toSvgY(pt.y, maxY);
-      return `${i === 0 ? "M" : "L"} ${px.toFixed(1)} ${py.toFixed(1)}`;
-    })
-    .join(" ");
+// Box-Muller サンプル生成
+function genSamples(mu: number, sigma: number, n: number, seed: number) {
+  const samples: number[] = [];
+  let s = seed;
+  const rand = () => {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    return (s >>> 0) / 4294967296;
+  };
+  for (let i = 0; i < n; i += 2) {
+    const u1 = rand() || 1e-10;
+    const u2 = rand();
+    const mag = sigma * Math.sqrt(-2 * Math.log(u1));
+    samples.push(mu + mag * Math.cos(2 * Math.PI * u2));
+    if (i + 1 < n) samples.push(mu + mag * Math.sin(2 * Math.PI * u2));
+  }
+  return samples;
+}
 
-  // Closed fill path: line + drop down to axis + close
-  const firstPx = toSvgX(points[0].x).toFixed(1);
-  const lastPx = toSvgX(points[points.length - 1].x).toFixed(1);
-  const fillPath = `${linePath} L ${lastPx} ${AXIS_Y} L ${firstPx} ${AXIS_Y} Z`;
+// ヒストグラム bins
+function makeBins(samples: number[], lo: number, hi: number, nBins: number) {
+  const w = (hi - lo) / nBins;
+  const counts = new Array(nBins).fill(0) as number[];
+  samples.forEach((v) => {
+    const i = Math.floor((v - lo) / w);
+    if (i >= 0 && i < nBins) counts[i]++;
+  });
+  const total = samples.length;
+  return counts.map((c, i) => ({
+    x: lo + (i + 0.5) * w,
+    lo: lo + i * w,
+    hi: lo + (i + 1) * w,
+    density: c / (total * w),
+  }));
+}
 
-  // Param ranges by distribution
-  const paramAConfig =
-    distribution === "lognormal"
-      ? { min: 4.9, max: 5.3, step: 0.01, label: "log-平均" }
-      : distribution === "uniform"
-        ? { min: 145, max: 193, step: 0.5, label: "最小値" }
-        : { min: 150, max: 190, step: 0.5, label: "平均 μ" };
+// フィットスコア（0~100）
+function fitScore(
+  bins: ReturnType<typeof makeBins>,
+  mu: number,
+  sigma: number
+) {
+  let sse = 0;
+  let norm = 0;
+  bins.forEach((b) => {
+    const pred = gauss(b.x, mu, sigma);
+    sse += (b.density - pred) ** 2;
+    norm += pred ** 2;
+  });
+  const relErr = Math.sqrt(sse / (norm + 1e-10));
+  return Math.max(0, Math.min(100, Math.round(100 * Math.exp(-relErr * 3))));
+}
 
-  const paramBConfig =
-    distribution === "lognormal"
-      ? { min: 0.01, max: 0.3, step: 0.01, label: "log-標準偏差 σ" }
-      : distribution === "uniform"
-        ? { min: paramA + 1, max: 195, step: 0.5, label: "最大値" }
-        : { min: 1, max: 25, step: 0.5, label: "標準偏差 σ" };
+// ── SVG Chart ─────────────────────────────────────────────────────────────────
+const W = 500,
+  H = 220,
+  PAD = { l: 44, r: 16, t: 16, b: 36 };
+const CW = W - PAD.l - PAD.r;
+const CH = H - PAD.t - PAD.b;
+
+type Bin = { x: number; lo: number; hi: number; density: number };
+
+function Chart({
+  bins,
+  muTrue,
+  sigmaTrue,
+  muUser,
+  sigmaUser,
+  lo,
+  hi,
+  color,
+  accent,
+  showTrue,
+}: {
+  bins: Bin[];
+  muTrue: number;
+  sigmaTrue: number;
+  muUser: number;
+  sigmaUser: number;
+  lo: number;
+  hi: number;
+  color: string;
+  accent: string;
+  showTrue: boolean;
+}) {
+  const maxDens = Math.max(...bins.map((b) => b.density)) * 1.25;
+
+  const px = (x: number) => PAD.l + ((x - lo) / (hi - lo)) * CW;
+  const py = (y: number) => PAD.t + CH - (y / maxDens) * CH;
+
+  const nCurve = 200;
+  const makePts = (mu: number, sigma: number) =>
+    Array.from({ length: nCurve }, (_, i) => {
+      const x = lo + (i / (nCurve - 1)) * (hi - lo);
+      return [px(x), py(gauss(x, mu, sigma))] as [number, number];
+    });
+
+  const truePts = makePts(muTrue, sigmaTrue);
+  const userPts = makePts(muUser, sigmaUser);
+
+  const pathD = (pts: [number, number][]) =>
+    pts
+      .map(
+        (p, i) =>
+          `${i === 0 ? "M" : "L"}${p[0].toFixed(1)},${p[1].toFixed(1)}`
+      )
+      .join(" ");
+
+  const fillD =
+    pathD(userPts) +
+    ` L${px(hi)},${py(0)} L${px(lo)},${py(0)} Z`;
+
+  const step = hi - lo <= 40 ? 5 : 10;
+  const ticks: number[] = [];
+  for (
+    let v = Math.ceil(lo / step) * step;
+    v <= hi;
+    v += step
+  )
+    ticks.push(v);
 
   return (
-    <section className="not-prose my-8 rounded-xl border border-slate-200 p-4 dark:border-slate-700">
-      <h3 className="mb-4 text-base font-semibold">{title}</h3>
-      <div className="grid gap-5 md:grid-cols-[2fr_1fr]">
-        {/* Chart */}
-        <div className="rounded-lg border border-slate-200 p-2 dark:border-slate-700">
-          <svg
-            viewBox={`0 0 ${SVG_W} ${SVG_H}`}
-            className="h-auto w-full"
-            aria-label="分布グラフ"
+    <svg
+      width="100%"
+      viewBox={`0 0 ${W} ${H}`}
+      style={{ display: "block" }}
+      aria-label="分布グラフ"
+    >
+      {/* Grid */}
+      {[0.25, 0.5, 0.75, 1.0].map((t) => {
+        const y = py(maxDens * t);
+        return (
+          <line
+            key={t}
+            x1={PAD.l}
+            y1={y}
+            x2={W - PAD.r}
+            y2={y}
+            stroke="#1e1e30"
+            strokeWidth="1"
+          />
+        );
+      })}
+
+      {/* Histogram bars */}
+      {bins.map((b, i) => {
+        const bx = px(b.lo);
+        const bw = Math.max(1, px(b.hi) - px(b.lo) - 1);
+        const bh = (b.density / maxDens) * CH;
+        return (
+          <rect
+            key={i}
+            x={bx}
+            y={py(b.density)}
+            width={bw}
+            height={bh}
+            fill={color}
+            opacity={0.35}
+            rx={1}
+          />
+        );
+      })}
+
+      {/* User curve fill */}
+      <path d={fillD} fill={`${accent}18`} />
+
+      {/* True distribution — dashed (toggleable) */}
+      {showTrue && (
+        <path
+          d={pathD(truePts)}
+          fill="none"
+          stroke="#ffffff40"
+          strokeWidth="1.5"
+          strokeDasharray="5,4"
+        />
+      )}
+
+      {/* User curve */}
+      <path
+        d={pathD(userPts)}
+        fill="none"
+        stroke={accent}
+        strokeWidth="2.5"
+        style={{ filter: `drop-shadow(0 0 4px ${accent}88)` }}
+      />
+
+      {/* Axes */}
+      <line
+        x1={PAD.l}
+        y1={PAD.t}
+        x2={PAD.l}
+        y2={PAD.t + CH}
+        stroke="#3a3a5a"
+        strokeWidth="1.5"
+      />
+      <line
+        x1={PAD.l}
+        y1={PAD.t + CH}
+        x2={W - PAD.r}
+        y2={PAD.t + CH}
+        stroke="#3a3a5a"
+        strokeWidth="1.5"
+      />
+
+      {/* X ticks */}
+      {ticks.map((v) => (
+        <g key={v}>
+          <line
+            x1={px(v)}
+            y1={PAD.t + CH}
+            x2={px(v)}
+            y2={PAD.t + CH + 4}
+            stroke="#3a3a5a"
+            strokeWidth="1"
+          />
+          <text
+            x={px(v)}
+            y={PAD.t + CH + 16}
+            textAnchor="middle"
+            fill="#5a5a7a"
+            fontSize="10"
+            fontFamily="monospace"
           >
-            {/* Vertical grid lines */}
-            {X_TICKS.map((tick) => {
-              const px = toSvgX(tick);
-              return (
-                <line
-                  key={tick}
-                  x1={px}
-                  y1={PLOT_TOP}
-                  x2={px}
-                  y2={AXIS_Y}
-                  stroke="#e2e8f0"
-                  strokeWidth="1"
-                  strokeDasharray="3 3"
-                />
-              );
-            })}
+            {v}
+          </text>
+        </g>
+      ))}
 
-            {/* X-axis */}
-            <line
-              x1={PLOT_X0}
-              y1={AXIS_Y}
-              x2={PLOT_X1}
-              y2={AXIS_Y}
-              stroke="#94a3b8"
-              strokeWidth="1"
-            />
+      {/* Y label */}
+      <text
+        x={12}
+        y={PAD.t + CH / 2}
+        textAnchor="middle"
+        fill="#4a4a6a"
+        fontSize="9"
+        fontFamily="monospace"
+        transform={`rotate(-90,12,${PAD.t + CH / 2})`}
+      >
+        density
+      </text>
 
-            {/* X-axis tick labels */}
-            {X_TICKS.map((tick) => {
-              const px = toSvgX(tick);
-              return (
-                <text
-                  key={tick}
-                  x={px}
-                  y={SVG_H - 3}
-                  textAnchor="middle"
-                  fontSize="8"
-                  fill="#94a3b8"
-                >
-                  {tick}
-                </text>
-              );
-            })}
+      {/* X label */}
+      <text
+        x={PAD.l + CW / 2}
+        y={H - 2}
+        textAnchor="middle"
+        fill="#4a4a6a"
+        fontSize="10"
+        fontFamily="monospace"
+      >
+        身長 (cm)
+      </text>
 
-            {/* Fill under curve */}
-            <path d={fillPath} fill={fillColor} />
+      {/* mu markers */}
+      {showTrue && (
+        <line
+          x1={px(muTrue)}
+          y1={PAD.t}
+          x2={px(muTrue)}
+          y2={PAD.t + CH}
+          stroke="#ffffff30"
+          strokeWidth="1"
+          strokeDasharray="3,3"
+        />
+      )}
+      <line
+        x1={px(muUser)}
+        y1={PAD.t}
+        x2={px(muUser)}
+        y2={PAD.t + CH}
+        stroke={`${accent}88`}
+        strokeWidth="1.5"
+        strokeDasharray="3,3"
+      />
+    </svg>
+  );
+}
 
-            {/* Curve */}
-            <path d={linePath} fill="none" stroke={stroke} strokeWidth="2.2" />
 
-            {/* Data dots (rug plot) */}
-            {data.map((value, index) => {
-              const x = toSvgX(value);
-              const y = AXIS_Y + 2 + (index % 3) * 2.2;
-              return (
-                <circle key={`h-${index}`} cx={x} cy={y} r="1.4" fill="#0ea5e9" opacity="0.7" />
-              );
-            })}
-          </svg>
+// ── Main ──────────────────────────────────────────────────────────────────────
+const N_SAMPLES = 800;
+const N_BINS = 28;
+const SEEDS: Record<DatasetKey, number> = { male: 42, female: 137, mixed: 99 };
+
+export function HeightDistributionWidget() {
+  const [datasetKey, setDatasetKey] = useState<DatasetKey>("male");
+  const [muUser, setMuUser] = useState(165);
+  const [sigUser, setSigUser] = useState(8);
+  const [revealed, setRevealed] = useState(false);
+  const [showTrue, setShowTrue] = useState(false);
+  const [bestScore, setBestScore] = useState(0);
+
+  const ds = DATASETS[datasetKey as DatasetKey];
+  const lo = ds.mu - 4.5 * ds.sigma;
+  const hi = ds.mu + 4.5 * ds.sigma;
+
+  const samples = useMemo(
+    () => genSamples(ds.mu, ds.sigma, N_SAMPLES, SEEDS[datasetKey as DatasetKey]),
+    [datasetKey, ds.mu, ds.sigma]
+  );
+  const bins = useMemo(
+    () => makeBins(samples, lo, hi, N_BINS),
+    [samples, lo, hi]
+  );
+  const score = useMemo(
+    () => fitScore(bins, muUser, sigUser),
+    [bins, muUser, sigUser]
+  );
+
+  const handleSliderChange = (newMu: number, newSig: number) => {
+    const s = fitScore(bins, newMu, newSig);
+    if (s > bestScore) setBestScore(s);
+  };
+
+  const handleDataset = (key: DatasetKey) => {
+    setDatasetKey(key);
+    setMuUser(165);
+    setSigUser(8);
+    setRevealed(false);
+    setShowTrue(false);
+    setBestScore(0);
+  };
+
+  return (
+    <section className="not-prose my-8">
+      <style>{`
+        .hdw-slider {
+          -webkit-appearance: none;
+          width: 100%;
+          height: 2px;
+          background: #252535;
+          outline: none;
+          border-radius: 2px;
+          cursor: pointer;
+        }
+        .hdw-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          background: var(--thumb-color);
+          border: 2px solid #0d0d14;
+          box-shadow: 0 0 8px var(--thumb-color);
+          cursor: pointer;
+        }
+        .hdw-slider::-moz-range-thumb {
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          background: var(--thumb-color);
+          border: 2px solid #0d0d14;
+          box-shadow: 0 0 8px var(--thumb-color);
+          cursor: pointer;
+        }
+        .hdw-ds-btn {
+          background: #13131f;
+          border: 1px solid #22223a;
+          border-radius: 6px;
+          color: #5a5a7a;
+          font-size: 0.65rem;
+          padding: 0.45rem 0.8rem;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          font-family: monospace;
+        }
+        .hdw-ds-btn:hover { border-color: #4a4a6a; color: #9999bb; }
+      `}</style>
+
+      <div
+        style={{
+          fontFamily: "monospace",
+          background: "#0d0d14",
+          color: "#e8e4d9",
+          borderRadius: 12,
+          padding: "1.5rem",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Header */}
+        <div
+          style={{
+            borderLeft: "3px solid #ffcc44",
+            paddingLeft: "0.8rem",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "0.55rem",
+              letterSpacing: "0.2em",
+              color: "#5a5a7a",
+              marginBottom: "0.2rem",
+            }}
+          >
+            インタラクティブ
+          </div>
+          <h3
+            style={{
+              fontSize: "1.3rem",
+              fontWeight: 600,
+              letterSpacing: "-0.02em",
+              margin: 0,
+              color: "#e8e4d9",
+            }}
+          >
+            分布マッチングゲーム
+          </h3>
+          <p
+            style={{
+              fontSize: "0.68rem",
+              color: "#7777aa",
+              marginTop: "0.3rem",
+              lineHeight: 1.7,
+            }}
+          >
+            正規分布の{" "}
+            <span style={{ color: "#60b8ff" }}>μ（平均）</span> と{" "}
+            <span style={{ color: "#f0a0c0" }}>σ（標準偏差）</span>{" "}
+            を調整して
+            <br />
+            ヒストグラムにぴったり重ねよう
+          </p>
         </div>
 
-        {/* Controls */}
-        <div className="space-y-4">
-          {/* Distribution selector */}
-          <div>
-            <p className="mb-1 text-xs font-medium text-slate-500">分布</p>
-            <select
-              value={distribution}
-              onChange={(event) =>
-                setDistribution(event.target.value as DistributionType)
-              }
-              className="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm dark:border-slate-600 dark:bg-slate-900"
+        {/* Dataset selector */}
+        <div
+          style={{
+            display: "flex",
+            gap: "0.5rem",
+            marginBottom: "1.2rem",
+            flexWrap: "wrap",
+          }}
+        >
+          {(Object.entries(DATASETS) as [DatasetKey, (typeof DATASETS)[DatasetKey]][]).map(
+            ([key, d]) => (
+              <button
+                key={key}
+                className="hdw-ds-btn"
+                onClick={() => handleDataset(key)}
+                style={
+                  datasetKey === key
+                    ? {
+                        borderColor: d.accent,
+                        color: d.color,
+                        background: `${d.accent}18`,
+                        boxShadow: `0 0 8px ${d.accent}44`,
+                      }
+                    : {}
+                }
+              >
+                {d.emoji} {d.label}
+              </button>
+            )
+          )}
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 220px",
+            gap: "1.2rem",
+          }}
+        >
+          {/* Chart column */}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}
+          >
+            <div
+              style={{
+                background: "#10101a",
+                border: "1px solid #1e1e30",
+                borderRadius: 8,
+                padding: "0.8rem",
+                overflow: "hidden",
+              }}
             >
-              <option value="normal">正規分布</option>
-              <option value="uniform">一様分布</option>
-              <option value="lognormal">対数正規分布</option>
-            </select>
-          </div>
-
-          {/* Param A slider */}
-          <div>
-            <div className="mb-0.5 flex justify-between text-xs">
-              <span className="font-medium">{paramAConfig.label}</span>
-              <span className="tabular-nums text-slate-500">{paramA.toFixed(2)}</span>
-            </div>
-            <input
-              type="range"
-              min={paramAConfig.min}
-              max={paramAConfig.max}
-              step={paramAConfig.step}
-              value={paramA}
-              onChange={(event) => setParamA(Number(event.target.value))}
-              className="w-full"
-            />
-          </div>
-
-          {/* Param B slider */}
-          <div>
-            <div className="mb-0.5 flex justify-between text-xs">
-              <span className="font-medium">{paramBConfig.label}</span>
-              <span className="tabular-nums text-slate-500">{paramB.toFixed(2)}</span>
-            </div>
-            <input
-              type="range"
-              min={paramBConfig.min}
-              max={paramBConfig.max}
-              step={paramBConfig.step}
-              value={paramB}
-              onChange={(event) => setParamB(Number(event.target.value))}
-              className="w-full"
-            />
-          </div>
-
-          {/* Match score */}
-          <div>
-            <div className="mb-1 flex justify-between text-xs font-medium">
-              <span>マッチ度</span>
-              <span>{score.toFixed(1)} / 100</span>
-            </div>
-            <div className="h-3 rounded bg-slate-100 dark:bg-slate-800">
-              <div
-                className="h-3 rounded transition-all duration-300"
-                style={{ width: `${score}%`, backgroundColor: stroke }}
+              <Chart
+                bins={bins}
+                muTrue={ds.mu}
+                sigmaTrue={ds.sigma}
+                muUser={muUser}
+                sigmaUser={sigUser}
+                lo={lo}
+                hi={hi}
+                color={ds.color}
+                accent={ds.accent}
+                showTrue={showTrue}
               />
+
+              {/* Legend */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: "1rem",
+                  paddingLeft: "0.5rem",
+                  marginTop: "0.3rem",
+                  fontSize: "0.6rem",
+                  color: "#5a5a7a",
+                  flexWrap: "wrap",
+                }}
+              >
+                <span>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: 20,
+                      height: 0,
+                      borderTop: "2px dashed #ffffff40",
+                      verticalAlign: "middle",
+                      marginRight: 5,
+                    }}
+                  />
+                  真の分布
+                </span>
+                <span>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: 20,
+                      height: 2,
+                      background: ds.accent,
+                      verticalAlign: "middle",
+                      marginRight: 5,
+                    }}
+                  />
+                  あなたの正規分布
+                </span>
+                <span>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: 14,
+                      height: 10,
+                      background: ds.color,
+                      opacity: 0.35,
+                      verticalAlign: "middle",
+                      marginRight: 5,
+                      borderRadius: 1,
+                    }}
+                  />
+                  データ
+                </span>
+              </div>
+            </div>
+
+            {/* Toggle true distribution */}
+            <button
+              onClick={() => setShowTrue((v: boolean) => !v)}
+              style={{
+                background: showTrue ? `${ds.accent}18` : "#1a1a28",
+                border: `1px solid ${showTrue ? ds.accent + "66" : "#3a3a5a"}`,
+                color: showTrue ? ds.color : "#7777aa",
+                fontSize: "0.65rem",
+                padding: "0.5rem",
+                borderRadius: 6,
+                cursor: "pointer",
+                fontFamily: "monospace",
+                transition: "all 0.15s",
+                boxShadow: showTrue ? `0 0 6px ${ds.accent}44` : "none",
+              }}
+            >
+              {showTrue ? "👁 真の分布を隠す" : "👁 真の分布を表示する"}
+            </button>
+
+            {/* Reveal answer */}
+            {!revealed ? (
+              <button
+                onClick={() => {
+                  setRevealed(true);
+                  setShowTrue(true);
+                }}
+                style={{
+                  background: "#1a1a28",
+                  border: "1px solid #3a3a5a",
+                  color: "#7777aa",
+                  fontSize: "0.65rem",
+                  padding: "0.5rem",
+                  borderRadius: 6,
+                  cursor: "pointer",
+                  fontFamily: "monospace",
+                  transition: "all 0.15s",
+                }}
+              >
+                🔍 答えを見る（μ = ? , σ = ?）
+              </button>
+            ) : (
+              <div
+                style={{
+                  background: "#13131f",
+                  border: `1px solid ${ds.accent}44`,
+                  borderRadius: 6,
+                  padding: "0.7rem",
+                  display: "flex",
+                  gap: "1.5rem",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontSize: "0.55rem",
+                      color: "#5a5a7a",
+                      marginBottom: "0.2rem",
+                    }}
+                  >
+                    真の μ
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "1.1rem",
+                      color: "#60b8ff",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {ds.mu}
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      fontSize: "0.55rem",
+                      color: "#5a5a7a",
+                      marginBottom: "0.2rem",
+                    }}
+                  >
+                    真の σ
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "1.1rem",
+                      color: "#f0a0c0",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {ds.sigma}
+                  </div>
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.62rem",
+                    color: "#5a5a7a",
+                    lineHeight: 1.7,
+                  }}
+                >
+                  {ds.emoji} {ds.label}の
+                  <br />
+                  実測値（参考値）
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Controls column */}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.9rem" }}
+          >
+            {/* Score ring */}
+            <div
+              style={{
+                background: "#10101a",
+                border: "1px solid #1e1e30",
+                borderRadius: 8,
+                padding: "1rem",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "0.4rem",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "0.55rem",
+                  letterSpacing: "0.15em",
+                  color: "#5a5a7a",
+                  marginBottom: "0.3rem",
+                }}
+              >
+                フィットスコア
+              </div>
+              <ScoreRing score={score} color={ds.accent} />
+              <div
+                style={{
+                  marginTop: "1.5rem",
+                  fontSize: "0.58rem",
+                  color: "#4a4a6a",
+                  textAlign: "center",
+                }}
+              >
+                ベスト:{" "}
+                <span style={{ color: ds.color }}>{bestScore}</span>
+              </div>
+            </div>
+
+            {/* Sliders */}
+            <div
+              style={{
+                background: "#10101a",
+                border: "1px solid #1e1e30",
+                borderRadius: 8,
+                padding: "1rem",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "0.55rem",
+                  letterSpacing: "0.15em",
+                  color: "#5a5a7a",
+                  marginBottom: "0.9rem",
+                }}
+              >
+                パラメータ
+              </div>
+
+              {/* mu slider */}
+              <div style={{ marginBottom: "1.1rem" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: "0.4rem",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                      color: "#60b8ff",
+                      fontWeight: 600,
+                    }}
+                  >
+                    μ　平均
+                  </span>
+                  <span style={{ fontSize: "0.8rem", color: "#e8e4d9" }}>
+                    {muUser.toFixed(1)}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="140"
+                  max="190"
+                  step="0.5"
+                  value={muUser}
+                  className="hdw-slider"
+                  style={
+                    { "--thumb-color": "#60b8ff" } as CSSProperties
+                  }
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const v = parseFloat(e.target.value);
+                    setMuUser(v);
+                    handleSliderChange(v, sigUser);
+                  }}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: "0.52rem",
+                    color: "#2a2a45",
+                    marginTop: "0.2rem",
+                  }}
+                >
+                  <span>140</span>
+                  <span>190</span>
+                </div>
+              </div>
+
+              {/* sigma slider */}
+              <div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: "0.4rem",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                      color: "#f0a0c0",
+                      fontWeight: 600,
+                    }}
+                  >
+                    σ　標準偏差
+                  </span>
+                  <span style={{ fontSize: "0.8rem", color: "#e8e4d9" }}>
+                    {sigUser.toFixed(1)}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="20"
+                  step="0.5"
+                  value={sigUser}
+                  className="hdw-slider"
+                  style={
+                    { "--thumb-color": "#f0a0c0" } as CSSProperties
+                  }
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const v = parseFloat(e.target.value);
+                    setSigUser(v);
+                    handleSliderChange(muUser, v);
+                  }}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: "0.52rem",
+                    color: "#2a2a45",
+                    marginTop: "0.2rem",
+                  }}
+                >
+                  <span>狭い (1)</span>
+                  <span>広い (20)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Insight box */}
+            <div
+              style={{
+                background: "#0f0f1e",
+                border: "1px solid #1e1e30",
+                borderLeft: "3px solid #ffcc44",
+                borderRadius: 6,
+                padding: "0.8rem",
+                fontSize: "0.62rem",
+                color: "#5a5a7a",
+                lineHeight: 1.9,
+              }}
+            >
+              <span style={{ color: "#ffcc44", fontWeight: 600 }}>
+                尤度とは：
+              </span>
+              <br />
+              「このパラメータで
+              <br />
+              このデータが生まれる
+              <br />
+              もっともらしさ」
+              <br />
+              スコアを最大化するのが{" "}
+              <span style={{ color: "#c8ff64" }}>最尤推定</span>。
             </div>
           </div>
         </div>

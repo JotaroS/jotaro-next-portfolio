@@ -1,8 +1,10 @@
-﻿"use client";
+"use client";
 
+import type { CSSProperties, ChangeEvent } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { DiceFace } from "@/components/widgets/DiceFace";
 import { ProbabilityBarChart } from "@/components/widgets/ProbabilityBarChart";
+import { ScoreRing } from "@/components/widgets/ScoreRing";
 
 type DiceMatchWidgetProps = {
   title?: string;
@@ -51,6 +53,16 @@ function relativeMatchScore(observedFreq: number[], guessFreq: number[]) {
   return Math.max(0, Math.min(100, Math.exp(ll - best) * 100));
 }
 
+// Accent color per face pair: 1–2: blue, 3–4: purple, 5–6: pink
+const FACE_ACCENT_COLORS: string[] = [
+  "#60b8ff",
+  "#60b8ff",
+  "#c8a0f0",
+  "#c8a0f0",
+  "#f0a0c0",
+  "#f0a0c0",
+];
+
 export function DiceMatchWidget({
   title = "確率分布マッチゲーム",
   initialRolls = 600,
@@ -60,6 +72,7 @@ export function DiceMatchWidget({
   const [rollCount, setRollCount] = useState(initialRolls);
   const [counts, setCounts] = useState(() => rollCounts(hidden, initialRolls));
   const [sliderValues, setSliderValues] = useState([1, 1, 1, 1, 1, 1]);
+  const [rollBtnHover, setRollBtnHover] = useState(false);
 
   useEffect(() => {
     setCounts(rollCounts(hidden, rollCount));
@@ -79,34 +92,130 @@ export function DiceMatchWidget({
     [observedFreq, normalizedGuess]
   );
 
-  const scoreColor =
-    score >= 85 ? "bg-emerald-500" : score >= 60 ? "bg-yellow-500" : "bg-rose-500";
-
   return (
-    <section className="not-prose my-8 rounded-xl border border-slate-200 p-4 dark:border-slate-700">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h3 className="m-0 text-base font-semibold">{title}</h3>
+    <section
+      className="not-prose my-8"
+      style={{
+        fontFamily: "monospace",
+        background: "#0d0d14",
+        color: "#e8e4d9",
+        borderRadius: 12,
+        padding: "1.5rem",
+        boxSizing: "border-box",
+      }}
+    >
+      <style>{`
+        .dmw-slider {
+          -webkit-appearance: none;
+          width: 100%;
+          height: 2px;
+          background: #252535;
+          outline: none;
+          border-radius: 2px;
+          cursor: pointer;
+        }
+        .dmw-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          background: var(--thumb-color);
+          border: 2px solid #0d0d14;
+          box-shadow: 0 0 8px var(--thumb-color);
+          cursor: pointer;
+        }
+        .dmw-slider::-moz-range-thumb {
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          background: var(--thumb-color);
+          border: 2px solid #0d0d14;
+          box-shadow: 0 0 8px var(--thumb-color);
+          cursor: pointer;
+        }
+      `}</style>
+
+      {/* Header */}
+      <div
+        style={{
+          borderLeft: "3px solid #ffcc44",
+          paddingLeft: "0.8rem",
+          marginBottom: "1.5rem",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "0.55rem",
+            letterSpacing: "0.2em",
+            color: "#5a5a7a",
+            marginBottom: "0.2rem",
+          }}
+        >
+          インタラクティブ
+        </div>
+        <h3
+          style={{
+            fontSize: "1.3rem",
+            fontWeight: 600,
+            letterSpacing: "-0.02em",
+            margin: 0,
+            color: "#e8e4d9",
+          }}
+        >
+          {title}
+        </h3>
+      </div>
+
+      {/* Roll button */}
+      <div style={{ marginBottom: "1.2rem" }}>
         <button
           type="button"
           onClick={() => setCounts(rollCounts(hidden, rollCount))}
-          className="rounded-md bg-sky-600 px-10 py-1.5 text-sm text-white hover:bg-sky-500"
+          onMouseEnter={() => setRollBtnHover(true)}
+          onMouseLeave={() => setRollBtnHover(false)}
+          style={{
+            background: "#1a1a28",
+            border: rollBtnHover ? "1px solid #60b8ff66" : "1px solid #3a3a5a",
+            color: rollBtnHover ? "#60b8ff" : "#7777aa",
+            boxShadow: rollBtnHover ? "0 0 8px #60b8ff44" : "none",
+            fontSize: "0.75rem",
+            padding: "0.5rem 2.5rem",
+            borderRadius: 6,
+            cursor: "pointer",
+            fontFamily: "monospace",
+            transition: "all 0.15s",
+          }}
         >
           サイコロをふる！
         </button>
       </div>
 
-      <div className="grid gap-5 md:grid-cols-[2fr_1fr]">
-        <ProbabilityBarChart
-          labels={["1", "2", "3", "4", "5", "6"]}
-          observed={counts}
-          expected={expectedCounts}
-          observedLabel="観測"
-          expectedLabel="あなたの分布"
-        />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "2fr 1fr",
+          gap: "1.2rem",
+        }}
+      >
+        {/* Chart column */}
+        <div>
+          <ProbabilityBarChart
+            labels={["1", "2", "3", "4", "5", "6"]}
+            observed={counts}
+            expected={expectedCounts}
+            observedLabel="観測"
+            expectedLabel="あなたの分布"
+          />
 
-        <div className="space-y-4">
-          {/* Roll count: dice icon + slider + count */}
-          <div className="flex items-center gap-2">
+          {/* Roll count slider */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.6rem",
+              marginTop: "1rem",
+            }}
+          >
             <DiceFace value={6} size={22} />
             <input
               type="range"
@@ -114,55 +223,121 @@ export function DiceMatchWidget({
               max={2400}
               step={60}
               value={rollCount}
-              onChange={(event) => setRollCount(Number(event.target.value))}
-              className="flex-1"
+              className="dmw-slider"
+              style={{ "--thumb-color": "#60b8ff", flex: 1 } as CSSProperties}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setRollCount(Number(e.target.value))
+              }
             />
-            <span className="w-10 text-right text-xs tabular-nums font-medium">
+            <span
+              style={{
+                width: "2.5rem",
+                textAlign: "right",
+                fontSize: "0.7rem",
+                color: "#8888aa",
+                fontVariantNumeric: "tabular-nums",
+              }}
+            >
               {rollCount}
             </span>
           </div>
+        </div>
 
-          {/* Probability sliders */}
-          <div>
-            <p className="mb-2 text-xs font-medium">p(1) ~ p(6) を調整</p>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-2">
-              {sliderValues.map((value, index) => (
-                <label key={`p-${index + 1}`} className="block text-xs">
-                  <div className="mb-0.5 flex items-center gap-1.5">
-                    <DiceFace value={index + 1} size={18} />
-                    <span className="tabular-nums text-slate-500">
-                      {normalizedGuess[index].toFixed(2)}
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0.01}
-                    max={2}
-                    step={0.01}
-                    value={value}
-                    onChange={(event) => {
-                      const updated = [...sliderValues];
-                      updated[index] = Number(event.target.value);
-                      setSliderValues(updated);
-                    }}
-                    className="w-full"
-                  />
-                </label>
-              ))}
+        {/* Controls column */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.9rem" }}>
+          {/* Score ring */}
+          <div
+            style={{
+              background: "#10101a",
+              border: "1px solid #1e1e30",
+              borderRadius: 8,
+              padding: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "0.4rem",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "0.55rem",
+                letterSpacing: "0.15em",
+                color: "#5a5a7a",
+                marginBottom: "0.3rem",
+              }}
+            >
+              マッチ度
             </div>
+            <ScoreRing score={score} color="#60b8ff" />
           </div>
 
-          {/* Match score */}
-          <div>
-            <div className="mb-1 flex justify-between text-xs font-medium">
-              <span>マッチ度</span>
-              <span>{score.toFixed(1)} / 100</span>
+          {/* Probability sliders */}
+          <div
+            style={{
+              background: "#10101a",
+              border: "1px solid #1e1e30",
+              borderRadius: 8,
+              padding: "1rem",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "0.55rem",
+                letterSpacing: "0.15em",
+                color: "#5a5a7a",
+                marginBottom: "0.7rem",
+              }}
+            >
+              p(1) ~ p(6) を調整
             </div>
-            <div className="h-3 rounded bg-slate-100 dark:bg-slate-800">
-              <div
-                className={`h-3 rounded transition-all ${scoreColor}`}
-                style={{ width: `${score}%` }}
-              />
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "0.5rem 0.75rem",
+              }}
+            >
+              {sliderValues.map((value, index) => {
+                const accentColor = FACE_ACCENT_COLORS[index];
+                return (
+                  <label key={`p-${index + 1}`} style={{ display: "block", fontSize: "0.7rem" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.4rem",
+                        marginBottom: "0.25rem",
+                      }}
+                    >
+                      <DiceFace value={index + 1} size={18} />
+                      <span
+                        style={{
+                          fontVariantNumeric: "tabular-nums",
+                          color: "#8888aa",
+                        }}
+                      >
+                        {normalizedGuess[index].toFixed(2)}
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min={0.01}
+                      max={2}
+                      step={0.01}
+                      value={value}
+                      className="dmw-slider"
+                      style={
+                        { "--thumb-color": accentColor, width: "100%" } as CSSProperties
+                      }
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        const updated = [...sliderValues];
+                        updated[index] = Number(e.target.value);
+                        setSliderValues(updated);
+                      }}
+                    />
+                  </label>
+                );
+              })}
             </div>
           </div>
         </div>
