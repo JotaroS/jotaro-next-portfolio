@@ -51,11 +51,44 @@ export default async function PostPage({ params }: PostPageProps) {
   const widgetMap = new Map(extracted.widgets.map((widget) => [widget.id, widget]));
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
       <article>
-        <div className="font-serif">{postData.type}</div>
-        <h1 className="text-4xl font-light mb-2">{postData.title}</h1>
-        <div className="text-gray-600 mb-12 text-sm">{postData.date}</div>
+        {/* Article type badge */}
+        {postData.type && (
+          <div className="mb-4">
+            <span className="inline-block text-xs font-medium uppercase tracking-widest text-muted-foreground border border-border rounded-full px-3 py-1">
+              {postData.type}
+            </span>
+          </div>
+        )}
+
+        {/* Title */}
+        <h1 className="text-3xl sm:text-4xl font-bold leading-snug tracking-tight mb-4">
+          {postData.title}
+        </h1>
+
+        {/* Date + tags */}
+        <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-6">
+          <time dateTime={postData.date}>{postData.date}</time>
+          {postData.tags?.map((tag) => (
+            <span
+              key={tag}
+              className="inline-flex items-center bg-muted rounded-full px-2.5 py-0.5 text-xs font-medium"
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Abstract */}
+        {postData.abstract && (
+          <p className="text-sm text-muted-foreground leading-relaxed tracking-wide p-4 bg-muted/40 border border-border/60 rounded-xl mb-8">
+            {postData.abstract}
+          </p>
+        )}
+
+        <hr className="border-border mb-10" />
+
         <div className="myMarkdown">
           {segments.map((segment, index) => {
             if (segment.widgetId) {
