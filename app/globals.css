@@ -1,4 +1,4 @@
-@import "highlight.js/styles/github-dark.css";
+@import "highlight.js/styles/atom-one-dark.css";
 
 @tailwind base;
 @tailwind components;
@@ -9,80 +9,170 @@
   @apply bg-gradient-to-r from-pink-500/70 to-blue-500/70 p-0.5;
 }
 
-.myMarkdown{
+/* =============================================
+   Markdown Article — Zenn/Notion-inspired style
+   ============================================= */
+
+.myMarkdown {
   @apply prose prose-base lg:prose-lg
   dark:prose-invert
-  prose-headings:font-semibold
+  prose-headings:font-bold
+  prose-headings:tracking-tight
   prose-h1:text-3xl
   prose-h2:text-2xl
   prose-h3:text-xl
   prose-p:text-base
   prose-li:text-base
-  prose-code:text-[0.9em]
-  prose-pre:text-[0.9em]
-  prose-blockquote:not-italic;
+  prose-code:text-[0.875em]
+  prose-pre:text-[0.875em]
+  prose-blockquote:not-italic
+  prose-a:text-blue-600
+  dark:prose-a:text-blue-400;
 }
 
+/* Japanese-friendly letter spacing */
 .myMarkdown :where(p, li, blockquote) {
-  line-height: 1.95;
-  letter-spacing: 0.01em;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
 }
 
 .myMarkdown :where(h1, h2, h3, h4) {
-  line-height: 1.45;
-  letter-spacing: 0.01em;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
 }
 
+/* Headings spacing */
 .myMarkdown h1 {
-  margin-top: 1.8em;
-  margin-bottom: 0.65em;
+  margin-top: 2em;
+  margin-bottom: 0.75em;
 }
 
+/* H2 — Zenn-like bottom border */
 .myMarkdown h2 {
-  margin-top: 1.6em;
-  margin-bottom: 0.6em;
-  padding-bottom: 0.35em;
-  border-bottom: 1px solid hsl(var(--border) / 0.9);
+  margin-top: 2.5em;
+  margin-bottom: 0.75em;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid hsl(var(--border));
 }
 
+/* H3 — left accent bar */
 .myMarkdown h3 {
-  margin-top: 1.35em;
+  margin-top: 2em;
   margin-bottom: 0.5em;
+  padding-left: 0.75em;
+  border-left: 3px solid hsl(213 94% 65%);
 }
 
+.dark .myMarkdown h3 {
+  border-left-color: hsl(213 94% 55%);
+}
+
+/* Paragraphs */
 .myMarkdown p {
-  margin-top: 0.95em;
-  margin-bottom: 0.95em;
+  margin-top: 1.1em;
+  margin-bottom: 1.1em;
 }
 
+/* Lists */
 .myMarkdown ul,
 .myMarkdown ol {
-  margin-top: 1em;
-  margin-bottom: 1em;
-  padding-left: 1.25em;
+  margin-top: 0.85em;
+  margin-bottom: 0.85em;
+  padding-left: 1.5em;
 }
 
+.myMarkdown li {
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+}
+
+/* Blockquote — Zenn-like left accent + subtle bg */
 .myMarkdown blockquote {
-  margin-top: 1.15em;
-  margin-bottom: 1.15em;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  padding: 0.75em 1.25em;
+  border-left: 4px solid hsl(213 94% 60%);
+  background: hsl(213 94% 60% / 0.07);
+  border-radius: 0 0.5rem 0.5rem 0;
+  color: inherit;
 }
 
+.myMarkdown blockquote p {
+  margin: 0.3em 0;
+}
+
+/* Inline code */
+.myMarkdown :not(pre) > code {
+  background: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.3rem;
+  padding: 0.15em 0.45em;
+}
+
+/* Code blocks */
+.myMarkdown pre {
+  border-radius: 0.75rem;
+  border: 1px solid hsl(var(--border) / 0.6);
+  box-shadow: 0 2px 8px hsl(0 0% 0% / 0.12);
+  overflow-x: auto;
+}
+
+/* Links */
+.myMarkdown a {
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: opacity 0.15s;
+}
+
+.myMarkdown a:hover {
+  opacity: 0.75;
+}
+
+/* Tables */
+.myMarkdown table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.myMarkdown th {
+  background: hsl(var(--muted));
+  font-weight: 600;
+}
+
+.myMarkdown tbody tr:nth-child(even) td {
+  background: hsl(var(--muted) / 0.35);
+}
+
+/* Callout (aside) — Notion-like */
 .myMarkdown aside {
-  margin-top: 1.2em;
-  margin-bottom: 1.2em;
-  padding: 0.9rem 1rem;
-  border: 1px solid hsl(var(--border) / 0.9);
-  border-radius: 0.6rem;
-  background: hsl(var(--background) / 0.45);
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  padding: 1rem 1.25rem;
+  border: 1px solid hsl(var(--border));
+  border-left: 4px solid hsl(213 94% 60%);
+  border-radius: 0.5rem;
+  background: hsl(var(--muted) / 0.4);
 }
 
 .myMarkdown aside p {
-  margin: 0.35em 0;
+  margin: 0.3em 0;
+  letter-spacing: 0.03em;
 }
 
+/* Horizontal rule */
 .myMarkdown hr {
-  margin-top: 2em;
-  margin-bottom: 2em;
+  margin-top: 3em;
+  margin-bottom: 3em;
+  border-color: hsl(var(--border));
+}
+
+/* Images */
+.myMarkdown img {
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 16px hsl(0 0% 0% / 0.1);
 }
 
 .gradBorder i {
