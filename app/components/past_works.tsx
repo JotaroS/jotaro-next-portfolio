@@ -1,5 +1,6 @@
 "use client";
 import { PublicationLinkTags } from "@/app/components/publication_link_tags";
+import { AbstractThumbnail } from "@/app/components/abstract_thumbnail";
 import type { PublicationItemList, PublicationItemProps } from "@/app/components/publication-types";
 
 export type PastWorkItem = {
@@ -33,13 +34,9 @@ export function PastWorkItem(props: PublicationItemProps) {
                         height={200}
                         className="mb-4 rounded-xl"
                     />}
-                    {!props.link_image && <img
-                        src={"/placeholder.jpg"}
-                        alt="Your Name"
-                        width={345}
-                        height={200}
-                        className="mb-4 rounded-xl"
-                    />}
+                    {!props.link_image && (
+                        <AbstractThumbnail className="mb-4 rounded-xl" />
+                    )}
                 </div>
                 <div className="col-span-2">
                     <div className="inset-x-0 bottom-0">

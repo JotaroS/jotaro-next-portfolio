@@ -120,6 +120,7 @@ export default async function Portfolio() {
 
             <h3 className="text-md mb-2">Reviewer</h3>
             <ul className="text-sm list-disc ml-5 mb-6">
+              <li>UIST 2026, <b className='award'>Special Recognition for Outstanding Review x2</b></li>
               <li>CHI 2026, <b className='award'>Special Recognition for Outstanding Review</b></li>
               <li>UIST 2025</li>
               <li>CHI 2025, <b className='award'>Special Recognition for Outstanding Review</b></li>

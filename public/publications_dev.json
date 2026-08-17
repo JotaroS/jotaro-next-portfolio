@@ -1,5 +1,18 @@
 [
     {
+        "title": "One Demo Publication to be Presented",
+        "authors": [
+            ""
+        ],
+        "abstract": "Details will be announced closer to the conference.",
+        "year": 2026,
+        "conference": "ACM UIST 2026 (Demo)",
+        "idx": null,
+        "type": "demo",
+        "award": null,
+        "featured": true
+    },
+    {
         "title": "Trusscillator: a System for Fabricating Human-Scale Human-Powered Oscillating Devices",
         "authors": [
             "Robert Kovacs",
