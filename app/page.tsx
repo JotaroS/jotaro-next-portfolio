@@ -32,7 +32,7 @@ export default async function Portfolio() {
 
   return (
     <div id='my-page' className="min-h-screen bg-background text-foreground">
-      <div className="container mx-auto  flex flex-col lg:flex-row">
+      <div className="container mx-auto px-4 sm:px-6 flex flex-col lg:flex-row">
         {/* Left Sidebar */}
         <aside className="lg:w-1/3 lg:pr-8 mb-8 lg:mb-0">
           <div className="sticky top-40 mt-20 ">
@@ -69,7 +69,7 @@ export default async function Portfolio() {
         <main className="lg:w-2/3">
           <section className="mb-12">
             <h3 className="text-xl font-bold mt-20 mb-4">Profile</h3>
-            <p className=" text-muted-foreground text-justify">
+            <p className=" text-muted-foreground text-left sm:text-justify">
               <b>Dr. Jotaro Shigeyama</b> is currently Human-Computer Interaction researcher at Sony.
               Previously, he obtained Ph.D at Hasso Plattner Institute with Prof. Patrick Baudisch.
               He earned Bachelor & Master degree in Cyber Interface Lab with Prof. Michitaka Hirose in the University of Tokyo.
@@ -78,7 +78,7 @@ export default async function Portfolio() {
               His work has been awarded in such venue such as CHI Best Paper Nomination or SIGGRAPH SRC Semi-Finalist.
             </p>
             <h3 className="text-xl font-bold mt-12 mb-4">Research</h3>
-            <p className=" text-muted-foreground text-justify">
+            <p className=" text-muted-foreground text-left sm:text-justify">
               My research focuses on Human-Computer Interaction, with an emphasis on Virtual Reality, Augmented Reality, and Haptics.
 
               I engineer <b>haptic and virtual experiences that is derived from human perception</b>.
