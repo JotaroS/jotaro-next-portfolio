@@ -48,7 +48,7 @@ export default function RootLayout({
           >
         <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="container mx-auto px-4 sm:px-6 flex h-14 items-center">
-            <nav className="flex items-center space-x-4 lg:space-x-6 lg:ml-20">
+            <nav className="flex items-center space-x-4 lg:space-x-6">
               <Link
                 href="/"
                 className="text-sm font-bold transition-colors hover:text-primary"
