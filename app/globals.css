@@ -175,6 +175,19 @@
   box-shadow: 0 4px 16px hsl(0 0% 0% / 0.1);
 }
 
+/* Embeds (e.g. YouTube) — keep responsive so fixed width/height attributes
+   don't overflow the viewport on mobile. */
+.myMarkdown iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  margin: 1.5em 0;
+  border: 0;
+  border-radius: 0.75rem;
+}
+
 .gradBorder i {
   content: '';
   position: absolute;
